@@ -31,6 +31,10 @@ nauczyć na pamięć:
 
 **Tryby dodatkowe**
 
+- **Wyzwanie dnia** — jedno pytanie dziennie, jedna próba. Temat zmienia się z dnia na dzień,
+  a pytanie jest tego dnia takie samo na każdym urządzeniu (losowanie zasiane datą), więc można
+  porównać się z domownikami. Rozwiązane dni budują **serię dni z rzędu** (pasek ostatniego
+  tygodnia na ekranie głównym), a za trafną odpowiedź jest 20 pkt plus bonus za długość serii.
 - **Sprawdzian z działu** — 12 pytań, z każdego tematu co najmniej jedno, na koniec ocena 1–6
   z jawnymi progami.
 - **Pokonaj swoje błędy** — pytania, na które padła zła odpowiedź, wracają do poprawy.
@@ -43,6 +47,8 @@ nauczyć na pamięć:
 - szlak z pieczątkami (pieczątka za 2 rundy z wynikiem min. 7/8) i stopnie kartografa,
 - seria dobrych odpowiedzi — liczona tylko przy pytaniach, w których trudno zgadnąć,
 - dźwięki generowane w przeglądarce (bez plików), z wyłącznikiem w opcjach,
+- czytanie na głos (syntezator mowy przeglądarki): przycisk głośnika przy każdym pytaniu,
+  a w opcjach przełącznik, po którym lektor czyta sam pytanie i wyjaśnienie,
 - animacje wyjaśniające: skreślanie zer przy zamianie jednostek, wzgórze wyrastające
   z poziomic wraz z przekrojem terenu, reflektor na wskazanym elemencie mapy.
 

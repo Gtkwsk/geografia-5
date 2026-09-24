@@ -208,6 +208,35 @@ button{font:inherit; color:inherit}
   background:var(--bad-soft); color:var(--bad); border-radius:999px; padding:2px 10px;
 }
 
+/* ---------- wyzwanie dnia ---------- */
+.daily{
+  margin-top:10px; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:14px 16px;
+  display:flex; align-items:center; gap:14px 18px; flex-wrap:wrap;
+}
+.daily.fresh{border-color:var(--warm); background:linear-gradient(90deg,var(--warm-soft),var(--surface) 62%)}
+.daily .d-main{flex:1 1 250px; display:grid; gap:3px}
+.daily .d-label{font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+.daily .d-title{font-family:var(--f-display); font-size:18px; font-weight:800; letter-spacing:-.02em}
+.daily .d-sub{font-size:13.5px; color:var(--ink-soft); line-height:1.4}
+.daily .d-sub b{color:var(--ink)}
+.daily .check{flex:none}
+.days{display:flex; gap:6px; margin-left:auto}
+.days span{display:grid; gap:4px; justify-items:center}
+.days small{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-faint); text-transform:uppercase}
+.days i{
+  width:24px; height:24px; border-radius:8px; border:1px solid var(--line); background:var(--surface-2);
+  display:grid; place-items:center; font-style:normal; font-size:13px; color:var(--ink-faint);
+}
+.days i.hit{background:var(--warm-soft); border-color:var(--warm); color:var(--warm)}
+.days i.today{outline:2px solid var(--accent); outline-offset:1px}
+.daysrow{display:flex; justify-content:center; margin:6px 0 14px}
+.daysrow .days{margin-left:0}
+.d-streak{
+  font-family:var(--f-mono); font-size:13px; font-weight:600; white-space:nowrap;
+  background:var(--warm-soft); color:var(--warm); border-radius:999px; padding:4px 11px;
+}
+
 /* ---------- misje ---------- */
 .missions{display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:10px}
 .mission{
@@ -246,6 +275,17 @@ button{font:inherit; color:inherit}
 }
 .q{font-family:var(--f-display); font-size:19px; font-weight:600; letter-spacing:-.01em; margin:0 0 4px; text-wrap:balance}
 .qsub{margin:0 0 14px; color:var(--ink-soft); font-size:14.5px}
+/* czytanie pytania na głos */
+.qline{display:flex; align-items:flex-start; gap:10px}
+.qline .q{flex:1 1 auto}
+.speak{
+  flex:none; width:36px; height:36px; border-radius:10px; cursor:pointer;
+  background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft);
+  display:grid; place-items:center;
+}
+.speak:hover{border-color:var(--accent); color:var(--accent)}
+.speak.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent)}
+.speak svg{display:block}
 
 .figure{
   background:var(--map-paper); border:1px solid var(--line-strong); border-radius:10px;
@@ -468,6 +508,9 @@ button{font:inherit; color:inherit}
 .confetti{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:50}
 .done .figure{max-width:560px; margin:0 auto 14px}
 
+@media (max-width:560px){
+  .days{margin-left:0}
+}
 @media (max-width:460px){
   .q{font-size:17.5px}
   .numrow input{width:120px; font-size:19px}
@@ -507,6 +550,10 @@ button{font:inherit; color:inherit}
           <span><b>Ciemny motyw</b><small>łagodniejszy dla oczu wieczorem</small></span>
           <button class="switch" id="themeSwitch" role="switch" aria-checked="false" aria-label="Ciemny motyw"><i></i></button>
         </div>
+        <div class="opt-row" id="speakRow" hidden>
+          <span><b>Czytanie na głos</b><small>pytania i wyjaśnienia czyta lektor</small></span>
+          <button class="switch" id="speakSwitch" role="switch" aria-checked="false" aria-label="Czytanie na głos"><i></i></button>
+        </div>
       </div>
     </div>
   </div>
@@ -521,6 +568,7 @@ button{font:inherit; color:inherit}
     </div>
 
     <section class="rank" id="rank" aria-label="Twój stopień i szlak z pieczątkami"></section>
+    <section class="daily" id="daily" aria-label="Wyzwanie dnia"></section>
     <div class="actions" id="actions"></div>
 
     <div class="sec-h"><h2>Ćwiczenia</h2><div class="rule"></div></div>
@@ -1473,9 +1521,65 @@ function confetti() {
    STAN I ZAPIS
    ============================================================ */
 const STORE = 'czytam-mape-v1';
-let save = { pts: 0, best: {}, mastery: {}, stamps: {}, mistakes: [], bestStreak: 0, treasures: {}, sound: true, duel: { p1: '', p2: '', topic: 'all', rounds: 5 } };
+let save = {
+  pts: 0, best: {}, mastery: {}, stamps: {}, mistakes: [], bestStreak: 0, treasures: {},
+  sound: true, speak: false, duel: { p1: '', p2: '', topic: 'all', rounds: 5 },
+  daily: null,                                   // { date, ok } — dzisiejsze wyzwanie, jeśli już rozwiązane
+  days: { streak: 0, best: 0, last: '', log: [] } // seria dni z rzędu z wyzwaniem dnia
+};
 try { const raw = localStorage.getItem(STORE); if (raw) save = Object.assign(save, JSON.parse(raw)); } catch (e) { }
+save.days = Object.assign({ streak: 0, best: 0, last: '', log: [] }, save.days || {});
 function persist() { try { localStorage.setItem(STORE, JSON.stringify(save)); } catch (e) { } }
+
+/* ============================================================
+   DNI I WYZWANIE DNIA
+   Pytanie dnia jest to samo przez cały dzień (i takie samo na każdym urządzeniu),
+   bo losujemy je generatorem zasianym datą — zwykły Math.random dałby co odświeżenie
+   inne pytanie, a wyzwanie ma być jedno.
+   ============================================================ */
+const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const dayFrom = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const daysBetween = (a, b) => Math.round((dayFrom(b) - dayFrom(a)) / 86400000);
+const DAY_LETTER = ['N', 'P', 'W', 'Ś', 'C', 'P', 'S'];   // niedziela … sobota
+
+function seedOf(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+/* na czas jednego losowania podmieniamy Math.random na generator z ziarnem */
+function withSeed(seed, fn) {
+  const real = Math.random;
+  Math.random = mulberry32(seed);
+  try { return fn(); } finally { Math.random = real; }
+}
+const dailyMod = (key = dayKey()) => M[seedOf(key) % M.length];
+function dailyPick(key = dayKey()) {
+  const mod = dailyMod(key);
+  return { mod, q: withSeed(seedOf(key) ^ 0x9E3779B9, () => mod.gen.call(mod)) };
+}
+const dailyDone = () => !!(save.daily && save.daily.date === dayKey());
+
+/* seria dni: liczy się samo podejście, także nieudane — chodzi o codzienny nawyk */
+function markDay(ok) {
+  const t = dayKey(), d = save.days;
+  save.daily = { date: t, ok };
+  if (d.last !== t) {
+    d.streak = d.last && daysBetween(d.last, t) === 1 ? d.streak + 1 : 1;
+    d.last = t;
+    if (d.streak > d.best) d.best = d.streak;
+    d.log = (d.log || []).concat(t).slice(-90);
+  }
+  persist();
+}
 
 /* ============================================================
    DŹWIĘKI — syntezowane w przeglądarce (Web Audio), bez plików.
@@ -1537,6 +1641,56 @@ const Sound = {
     }
   }
 };
+
+/* ============================================================
+   CZYTANIE NA GŁOS — wbudowany w przeglądarkę syntezator mowy.
+   Pomaga, gdy czytanie długich poleceń sprawia jeszcze trudność.
+   ============================================================ */
+const Speech = {
+  on: typeof speechSynthesis !== 'undefined' && typeof SpeechSynthesisUtterance !== 'undefined',
+  voice: null,
+  findVoice() {
+    if (!this.on || this.voice) return this.voice;
+    const vs = speechSynthesis.getVoices() || [];
+    this.voice = vs.find(v => v.lang === 'pl-PL') || vs.find(v => (v.lang || '').startsWith('pl')) || null;
+    return this.voice;
+  },
+  /* z pytania trzeba zdjąć znaczniki HTML, a „1 : 50 000” przeczytać po ludzku */
+  plain(html) {
+    const d = document.createElement('div');
+    d.innerHTML = String(html);
+    return d.textContent
+      .replace(/(\d)\s*:\s*(\d)/g, '$1 do $2')
+      .replace(/(\d)\s+(?=\d{3}\b)/g, '$1')
+      .replace(/\bn\.p\.m\./g, 'nad poziomem morza')
+      .replace(/\s+/g, ' ').trim();
+  },
+  say(text, onend) {
+    if (!this.on || !text) { if (onend) onend(); return; }
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'pl-PL'; u.rate = .95; u.pitch = 1;
+      const v = this.findVoice();
+      if (v) u.voice = v;
+      if (onend) { u.onend = onend; u.onerror = onend; }
+      speechSynthesis.speak(u);
+    } catch (e) { if (onend) onend(); }
+  },
+  stop() { if (this.on) { try { speechSynthesis.cancel(); } catch (e) { } } }
+};
+if (Speech.on && typeof speechSynthesis.addEventListener === 'function') {
+  speechSynthesis.addEventListener('voiceschanged', () => { Speech.voice = null; Speech.findVoice(); });
+}
+/* cały tekst pytania: polecenie, dopisek i warianty odpowiedzi */
+function questionSpeech(q) {
+  let t = Speech.plain(q.q);
+  if (q.sub) t += '. ' + Speech.plain(q.sub);
+  if (q.kind === 'choice' && !q.symbols) {
+    t += '. Do wyboru: ' + q.options.map((o, i) => `${'ABCD'[i]}. ${Speech.plain(o)}`).join('. ');
+  }
+  return t;
+}
 
 let streak = 0;   // bieżąca seria dobrych odpowiedzi (nie zapisuje się — to seria „na teraz”)
 function renderPts() { $('#pts').textContent = num(save.pts) + ' pkt'; }
@@ -1676,7 +1830,8 @@ function moveExplorer(key, last) {
 /* opcje: dźwięk i motyw */
 (function options() {
   const root = document.documentElement;
-  const btn = $('#optBtn'), panel = $('#optPanel'), snd = $('#soundSwitch'), thm = $('#themeSwitch');
+  const btn = $('#optBtn'), panel = $('#optPanel'), snd = $('#soundSwitch'), thm = $('#themeSwitch'), spk = $('#speakSwitch');
+  if (Speech.on) $('#speakRow').hidden = false; else save.speak = false;
   let cur = null;
   try { cur = localStorage.getItem(STORE + '-theme'); } catch (e) { }
   if (cur) root.setAttribute('data-theme', cur);
@@ -1685,6 +1840,7 @@ function moveExplorer(key, last) {
   const sync = () => {
     snd.setAttribute('aria-checked', String(!!save.sound));
     thm.setAttribute('aria-checked', String(isDark()));
+    spk.setAttribute('aria-checked', String(!!save.speak));
   };
   sync();
   const close = () => { panel.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
@@ -1700,6 +1856,10 @@ function moveExplorer(key, last) {
   snd.addEventListener('click', () => {
     save.sound = !save.sound; persist(); sync();
     Sound.play('ok');                         // próbka — słychać od razu, że działa
+  });
+  spk.addEventListener('click', () => {
+    save.speak = !save.speak; persist(); sync();
+    if (save.speak) Speech.say('Czytanie na głos włączone.'); else Speech.stop();
   });
   thm.addEventListener('click', () => {
     const next = isDark() ? 'light' : 'dark';
@@ -1744,9 +1904,47 @@ function trailSvg() {
   </svg>`;
 }
 
+/* pasek ostatnich siedmiu dni */
+function daysStrip() {
+  const log = new Set(save.days.log || []);
+  const now = new Date();
+  let out = '';
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+    const k = dayKey(d), hit = log.has(k);
+    out += `<span><small>${DAY_LETTER[d.getDay()]}</small>
+      <i class="${hit ? 'hit' : ''}${i === 0 ? ' today' : ''}" title="${k}${hit ? ' — wyzwanie zrobione' : ''}">${hit ? '✓' : '·'}</i></span>`;
+  }
+  const n = (save.days.log || []).length;
+  return `<div class="days" role="img" aria-label="Ostatnie siedem dni; wyzwań rozwiązanych łącznie: ${n}">${out}</div>`;
+}
+
+function renderDaily() {
+  const el = $('#daily'), d = save.days, done = dailyDone(), dm = dailyMod();
+  const dateTxt = new Date().toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+  const streakTxt = d.streak
+    ? `<span class="d-streak" title="Najdłuższa seria dni: ${d.best}">📅 ${d.streak} ${d.streak === 1 ? 'dzień' : 'dni'} z rzędu</span>`
+    : '';
+  el.className = 'daily' + (done ? '' : ' fresh');
+  el.innerHTML = `
+    <div class="d-main">
+      <span class="d-label">Wyzwanie dnia · ${esc(dateTxt)}</span>
+      <span class="d-title">${done ? (save.daily.ok ? '✓ Dzisiaj zaliczone' : 'Dzisiejsza próba wykorzystana') : 'Jedno pytanie, jedna próba'}</span>
+      <span class="d-sub">${done
+        ? `Temat dnia: <b>${esc(SHORT[dm.id])}</b>. Nowe pytanie czeka jutro${save.daily.ok ? '' : ', a ten temat można przećwiczyć niżej w ćwiczeniach'}.`
+        : `Temat na dziś: <b>${esc(SHORT[dm.id])}</b>. Za dobrą odpowiedź 20 pkt i bonus za serię dni.`}</span>
+    </div>
+    ${streakTxt}
+    ${daysStrip()}
+    ${done ? '' : '<button class="check" id="dailyBtn">Rozwiąż</button>'}`;
+  if (!done) $('#dailyBtn').addEventListener('click', () => start('daily'));
+}
+
 function renderHome() {
+  Speech.stop();
   $('#exercise').hidden = true;
   $('#home').hidden = false;
+  renderDaily();
 
   const n = stampCount(), nr = nextRank(n);
   $('#rank').innerHTML = `
@@ -1814,6 +2012,11 @@ let S = null;
 function start(type, arg) {
   S = { type, arg, i: 0, ok: 0, results: [], q: null, answered: false, mistakesMade: 0 };
   if (type === 'module') { S.mod = M.find(x => x.id === arg); S.total = 8; }
+  if (type === 'daily') {
+    if (dailyDone()) return renderHome();       // jedna próba dziennie
+    const dp = dailyPick();
+    S.mod = dp.mod; S.dailyQ = dp.q; S.total = 1;
+  }
   if (type === 'test') {
     /* z każdego tematu jedno pytanie + dwa losowe, w losowej kolejności */
     S.plan = shuffle([...M.map(m => m.id), ...shuffle(M).slice(0, 2).map(m => m.id)]);
@@ -1845,6 +2048,7 @@ function start(type, arg) {
 
 function sessionTitle() {
   return S.type === 'module' ? S.mod.title
+    : S.type === 'daily' ? 'Wyzwanie dnia'
     : S.type === 'test' ? 'Sprawdzian z działu'
       : S.type === 'review' ? 'Pokonaj swoje błędy'
         : S.type === 'duel' ? 'Pojedynek'
@@ -1857,6 +2061,9 @@ function nextQ() {
     const st = S.mission.steps[S.i];
     S.curMod = { id: 'mission', theory: MISSION_THEORY };
     S.q = Object.assign({}, st, { sub: st.sub || mapNote, fig: mapSvg({ explorer: PLACES[S.place], trail: S.trail }) });
+  } else if (S.type === 'daily') {
+    S.curMod = S.mod;
+    S.q = S.dailyQ;
   } else if (S.type === 'review') {
     S.curItem = S.queue[S.i];
     S.curMod = M.find(m => m.id === S.curItem.modId) || M[0];
@@ -1977,9 +2184,18 @@ function renderQ() {
     story = `<div class="turn ${pl.cls}"><span>Pytanie dla:</span><span class="who">${esc(pl.name)}</span><small>runda ${Math.floor(S.i / 2) + 1} z ${S.plan.length}</small></div>`;
   }
 
+  const speakBtn = Speech.on
+    ? `<button class="speak" id="readBtn" title="Przeczytaj pytanie na głos" aria-label="Przeczytaj pytanie na głos">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 9.5h3.4L12 5.5v13l-4.6-4H4z" fill="currentColor"/>
+          <path d="M15.6 9.2a4 4 0 0 1 0 5.6M18.2 6.6a7.6 7.6 0 0 1 0 10.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </button>`
+    : '';
+
   $('#exercise').innerHTML = head() + `<div class="card">
       ${story}
-      <p class="q">${q.q}</p>
+      <div class="qline"><p class="q">${q.q}</p>${speakBtn}</div>
       ${sub ? `<p class="qsub">${esc(sub)}</p>` : ''}
       ${body}
       <div class="fb" id="fb"></div>
@@ -1987,6 +2203,20 @@ function renderQ() {
     <details class="theory"><summary>Jak to działa? — przypomnienie z lekcji</summary><div class="body">${S.curMod.theory}</div></details>`;
 
   $('#backBtn').addEventListener('click', renderHome);
+
+  /* czytanie na głos: przycisk zawsze, samo czytanie — gdy włączone w Opcjach */
+  Speech.stop();
+  if (Speech.on) {
+    const text = questionSpeech(Object.assign({}, q, { sub }));
+    const rb = $('#readBtn');
+    const off = () => rb.classList.remove('on');
+    rb.addEventListener('click', () => {
+      if (rb.classList.contains('on')) { Speech.stop(); off(); return; }
+      rb.classList.add('on');
+      Speech.say(text, off);
+    });
+    if (save.speak) { rb.classList.add('on'); Speech.say(text, off); }
+  }
 
   if (q.kind === 'choice') {
     $('#opts').querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => answer(b.dataset.v, b)));
@@ -2021,22 +2251,25 @@ function answer(val, el) {
   /* punkty i seria. Seria rośnie tylko przy pytaniach, w których trudno zgadnąć
      (wpisywanie liczby, klikanie mapy, co najmniej 3 odpowiedzi do wyboru). */
   const eligible = q.kind !== 'choice' || q.options.length >= 3;
-  let gain = 0, bonus = 0;
+  let gain = 0, bonus = 0, dayBonus = 0;
   const duel = S.type === 'duel';
+  /* wyzwanie dnia zamyka się po jednej odpowiedzi — także błędnej; seria dni liczy samo podejście */
+  if (S.type === 'daily') markDay(good);
   if (duel) {
     /* pojedynek to zabawa dla dwojga — nie rusza punktów, serii ani zeszytu błędów dziecka */
     if (good) S.players[S.i % 2].score++;
     $('#duelScore').textContent = `${S.players[0].score} : ${S.players[1].score}`;
   } else if (good) {
     S.ok++;
-    gain = S.type === 'test' ? 12 : (S.type === 'module' ? 10 : 15);
+    gain = S.type === 'daily' ? 20 : S.type === 'test' ? 12 : (S.type === 'module' ? 10 : 15);
     if (eligible) { streak++; if (streak >= 3) bonus = 5; }
-    save.pts += gain + bonus;
+    if (S.type === 'daily') dayBonus = Math.min(save.days.streak, 5) * 5;
+    save.pts += gain + bonus + dayBonus;
     if (streak > save.bestStreak) save.bestStreak = streak;
   } else {
     streak = 0;
     S.mistakesMade++;
-    if (S.type === 'module' || S.type === 'test') addMistake(S.curMod.id, q);
+    if (S.type === 'module' || S.type === 'test' || S.type === 'daily') addMistake(S.curMod.id, q);
   }
   if (S.type === 'review' && good) { removeMistake(S.curItem.key); S.fixed++; }
   persist(); renderPts(); renderStreak(good && eligible && !duel);
@@ -2083,14 +2316,14 @@ function answer(val, el) {
 
   const note = good ? ''
     : S.type === 'review' ? '<p>To pytanie zostaje w zeszycie błędów — wróci następnym razem.</p>'
-      : (S.type === 'module' || S.type === 'test') ? '<p>To pytanie trafia do „Pokonaj swoje błędy” — wrócisz do niego później.</p>' : '';
+      : (S.type === 'module' || S.type === 'test' || S.type === 'daily') ? '<p>To pytanie trafia do „Pokonaj swoje błędy” — wrócisz do niego później.</p>' : '';
 
   const fb = $('#fb');
   fb.className = 'fb on ' + (good ? 'good' : 'bad');
   fb.innerHTML = `
     <h4>${good
       ? (duel ? `✓ Dobrze!<span class="gain">+1 dla: ${esc(S.players[S.i % 2].name)}</span>`
-        : `✓ Dobrze!<span class="gain">+${gain + bonus} pkt</span>${bonus ? `<span class="gain hot">🔥 seria ${streak}</span>` : ''}`)
+        : `✓ Dobrze!<span class="gain">+${gain + bonus + dayBonus} pkt</span>${bonus ? `<span class="gain hot">🔥 seria ${streak}</span>` : ''}${dayBonus ? `<span class="gain hot">📅 ${save.days.streak} ${save.days.streak === 1 ? 'dzień' : 'dni'} z rzędu</span>` : ''}`)
       : '✗ Niestety nie'}</h4>
     ${good ? '' : `<p>Poprawna odpowiedź: <b>${esc(correctTxt)}</b>${q.kind === 'number' ? ` (twoja odpowiedź: ${esc(shown)} ${esc(q.unit)})` : ''}</p>`}
     ${q.why ? `<p>${q.why}</p>` : ''}
@@ -2098,8 +2331,16 @@ function answer(val, el) {
     ${note}
     <button class="next" id="nextBtn">${S.i + 1 >= S.total ? 'Zobacz wynik'
       : duel ? `Podaj urządzenie: teraz ${esc(S.players[(S.i + 1) % 2].name)} →` : 'Następne pytanie →'}</button>`;
-  $('#nextBtn').addEventListener('click', () => { S.i++; nextQ(); });
+  $('#nextBtn').addEventListener('click', () => { Speech.stop(); S.i++; nextQ(); });
   $('#nextBtn').focus({ preventScroll: true });
+
+  /* przy czytaniu na głos lektor mówi też, jak było poprawnie i dlaczego */
+  if (save.speak && Speech.on) {
+    const parts = [good ? 'Dobrze!' : 'Niestety nie.'];
+    if (!good) parts.push('Poprawna odpowiedź: ' + Speech.plain(correctTxt) + (q.kind === 'number' ? ' ' + Speech.plain(q.unit) : '') + '.');
+    if (q.why) parts.push(Speech.plain(q.why));
+    setTimeout(() => Speech.say(parts.join(' ')), 250);
+  }
 }
 
 function verdict(p) {
@@ -2138,6 +2379,20 @@ function renderSummary() {
       extra = `<p class="mastery">Do pieczątki: <b>${save.mastery[id] || 0} z 2</b> rund z wynikiem co najmniej 7/8.</p>`;
     }
     if (ok === total) celebrate = true;
+  }
+
+  if (S.type === 'daily') {
+    const d = save.days, good = ok === 1;
+    top = `<div class="score">${good ? '✓' : '✗'}</div>`;
+    title = good ? 'Wyzwanie dnia zaliczone' : 'Wyzwanie dnia za nami';
+    text = good
+      ? 'Trafna odpowiedź. Nowe pytanie pojawi się jutro.'
+      : 'Tym razem nie wyszło, ale dzień się liczy — pytanie czeka w „Pokonaj swoje błędy”.';
+    extra = `<p class="mastery">📅 Seria dni: <b>${d.streak}</b> ${d.streak === 1 ? 'dzień' : 'dni'} z rzędu${d.best > d.streak ? ` · rekord: ${d.best}` : ''}</p>
+      <div class="daysrow">${daysStrip()}</div>
+      <p class="small-note">Wyzwanie dnia to jedno pytanie i jedna próba. Temat zmienia się każdego dnia, a pytanie jest takie samo dla wszystkich — można porównać się z domownikami.</p>`;
+    celebrate = good;
+    if (good) thumpAt = 400;
   }
 
   if (S.type === 'test') {
@@ -2200,7 +2455,7 @@ function renderSummary() {
       <p>${text}</p>
       ${extra}
       <div class="done-actions">
-        ${S.type === 'review' && !save.mistakes.length ? '' : `<button class="check" id="againBtn">${S.type === 'duel' ? 'Rewanż' : 'Jeszcze raz'}</button>`}
+        ${S.type === 'daily' || (S.type === 'review' && !save.mistakes.length) ? '' : `<button class="check" id="againBtn">${S.type === 'duel' ? 'Rewanż' : 'Jeszcze raz'}</button>`}
         <button class="ghost" id="homeBtn">Wróć do menu</button>
       </div>
     </div>`;
