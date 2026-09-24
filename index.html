@@ -1,0 +1,2222 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ćwiczenia z czytania mapy dla klasy 5: skala, podziałka, odległości, znaki umowne, kierunki świata i poziomice.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='11.5' fill='%23136B58'/%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3Cpath d='M15.8 8.2 13.5 13.5 8.2 15.8 10.5 10.5z' fill='%23fff'/%3E%3C/svg%3E">
+<style>html{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Czytam mapę</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+
+<style>
+:root{
+  --paper:#E9EEE7;
+  --surface:#FFFFFF;
+  --surface-2:#F4F7F2;
+  --ink:#16241F;
+  --ink-soft:#4C5F57;
+  --ink-faint:#7A8C83;
+  --line:#CBD6C9;
+  --line-strong:#9FB29C;
+
+  --accent:#136B58;
+  --accent-soft:#D6EAE2;
+  --warm:#A8551B;
+  --warm-soft:#F2E2D2;
+  --water:#2C6FA6;
+  --water-soft:#D7E7F3;
+
+  --ok:#1F7A45;
+  --ok-soft:#DCF0E2;
+  --bad:#B33A2B;
+  --bad-soft:#F7E0DC;
+
+  --map-paper:#FBFAF4;
+  --map-forest:#BFD9A8;
+  --map-meadow:#E4EFC8;
+  --map-water:#A8D0E8;
+  --map-water-ink:#2C6FA6;
+  --map-road:#D8A24A;
+  --map-build:#8A6A55;
+  --map-contour:#B07A3C;
+
+  --shadow:0 1px 2px rgba(22,36,31,.06), 0 8px 24px -12px rgba(22,36,31,.25);
+  --radius:14px;
+
+  --f-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono","Consolas",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1614;
+    --surface:#16211D;
+    --surface-2:#1C2823;
+    --ink:#E5EDE7;
+    --ink-soft:#A8BBB1;
+    --ink-faint:#7C9187;
+    --line:#2C3B35;
+    --line-strong:#43584F;
+
+    --accent:#4FC0A0;
+    --accent-soft:#16332C;
+    --warm:#E08A44;
+    --warm-soft:#33241A;
+    --water:#6AB0E0;
+    --water-soft:#132734;
+
+    --ok:#5BC486;
+    --ok-soft:#14301F;
+    --bad:#E8796A;
+    --bad-soft:#341B18;
+
+    --map-paper:#F6F3EA;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1614;
+  --surface:#16211D;
+  --surface-2:#1C2823;
+  --ink:#E5EDE7;
+  --ink-soft:#A8BBB1;
+  --ink-faint:#7C9187;
+  --line:#2C3B35;
+  --line-strong:#43584F;
+  --accent:#4FC0A0;
+  --accent-soft:#16332C;
+  --warm:#E08A44;
+  --warm-soft:#33241A;
+  --water:#6AB0E0;
+  --water-soft:#132734;
+  --ok:#5BC486;
+  --ok-soft:#14301F;
+  --bad:#E8796A;
+  --bad-soft:#341B18;
+  --map-paper:#F6F3EA;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--f-display); font-weight:700; margin:0; text-wrap:balance; line-height:1.15}
+button{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:6px}
+
+.wrap{max-width:860px; margin:0 auto; padding-inline:16px; padding-block:0 48px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky; top:env(safe-area-inset-top, 0px); z-index:20;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{
+  max-width:860px; margin:0 auto; padding:10px 16px;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:9px; font-family:var(--f-display); font-weight:800; letter-spacing:-.02em; font-size:19px}
+.brand svg{flex:none}
+.spacer{flex:1 1 auto}
+.pts{
+  font-family:var(--f-mono); font-size:13px; font-variant-numeric:tabular-nums;
+  background:var(--accent-soft); color:var(--accent); border-radius:999px;
+  padding:4px 11px; font-weight:600; white-space:nowrap;
+}
+.iconbtn{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  width:34px; height:34px; display:grid; place-items:center; cursor:pointer;
+}
+.iconbtn:hover{border-color:var(--line-strong)}
+
+/* ---------- hero ---------- */
+.hero{padding-block:26px 20px; display:grid; gap:10px}
+.eyebrow{
+  font-family:var(--f-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint);
+}
+.hero h1{font-size:clamp(28px,6.5vw,42px); letter-spacing:-.025em}
+.hero p{margin:0; color:var(--ink-soft); max-width:56ch}
+
+/* ---------- tiles ---------- */
+.sec-h{
+  display:flex; align-items:baseline; gap:10px; margin:26px 0 12px;
+}
+.sec-h h2{font-size:15px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--ink-soft)}
+.sec-h .rule{flex:1; height:1px; background:var(--line)}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:10px}
+.tile{
+  text-align:left; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:14px 14px 12px; cursor:pointer;
+  display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:start;
+  transition:border-color .15s, transform .12s;
+}
+.tile:hover{border-color:var(--accent); transform:translateY(-1px)}
+.tile .ic{
+  grid-row:span 2; width:38px; height:38px; border-radius:10px;
+  display:grid; place-items:center; background:var(--surface-2);
+}
+.tile h3{font-size:16.5px; letter-spacing:-.01em}
+.tile p{margin:0; font-size:13.5px; color:var(--ink-soft); line-height:1.4}
+.tile .meta{
+  grid-column:2; margin-top:7px; font-family:var(--f-mono); font-size:11px;
+  color:var(--ink-faint); display:flex; align-items:center; gap:6px;
+}
+.bar{flex:1; height:4px; background:var(--surface-2); border-radius:2px; overflow:hidden; max-width:82px}
+.bar i{display:block; height:100%; background:var(--accent); border-radius:2px}
+
+/* ---------- stopień i szlak z pieczątkami ---------- */
+.rank{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:14px 16px 8px; display:grid; gap:4px;
+}
+.rank-top{display:flex; align-items:baseline; gap:6px 12px; flex-wrap:wrap}
+.rank-label{font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+.rank-name{font-family:var(--f-display); font-size:22px; font-weight:800; letter-spacing:-.02em}
+.rank-meta{font-size:13.5px; color:var(--ink-soft); margin-left:auto}
+.trail{overflow-x:auto; margin-inline:-6px}
+.trail svg{display:block; width:100%; min-width:640px; height:auto}
+.hut{cursor:pointer}
+.hut:hover .hut-bg, .hut:focus-visible .hut-bg{stroke:var(--accent); stroke-width:3}
+.hut:focus{outline:none}
+
+/* ---------- główne akcje ---------- */
+.actions{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:10px; margin-top:10px}
+.action{
+  background:var(--surface); color:var(--ink); border:1px solid var(--line);
+  border-radius:var(--radius); padding:14px 16px; cursor:pointer; text-align:left;
+  display:flex; align-items:center; gap:13px;
+}
+.action:hover:not(:disabled){border-color:var(--accent)}
+.action:disabled{cursor:default; opacity:.6}
+.action b{font-family:var(--f-display); font-size:16.5px; display:block}
+.action small{font-size:13px; color:var(--ink-soft); display:block; line-height:1.35}
+.action.primary{background:var(--accent); color:var(--surface); border-color:transparent; box-shadow:var(--shadow)}
+.action.primary small{color:var(--surface); opacity:.85}
+.action svg{flex:none}
+.count{
+  margin-left:auto; font-family:var(--f-mono); font-weight:600; font-size:14px;
+  background:var(--bad-soft); color:var(--bad); border-radius:999px; padding:2px 10px;
+}
+
+/* ---------- misje ---------- */
+.missions{display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:10px}
+.mission{
+  text-align:left; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:14px; cursor:pointer; display:grid; gap:4px; color:var(--ink);
+}
+.mission:hover{border-color:var(--warm)}
+.mission b{font-family:var(--f-display); font-size:16.5px}
+.mission span{font-size:13.5px; color:var(--ink-soft); line-height:1.4}
+.stars{font-size:18px; letter-spacing:2px; color:var(--line-strong)}
+.stars i{font-style:normal; color:var(--warm)}
+.story{
+  margin:0 0 12px; padding:10px 13px; border-radius:10px; background:var(--warm-soft);
+  font-size:14.5px; color:var(--ink);
+}
+
+/* ---------- exercise ---------- */
+.ex-head{display:flex; align-items:center; gap:12px; padding-block:18px 6px; flex-wrap:wrap}
+.back{
+  background:none; border:1px solid var(--line); border-radius:9px; padding:5px 11px;
+  cursor:pointer; font-size:13.5px; color:var(--ink-soft);
+}
+.back:hover{border-color:var(--line-strong); color:var(--ink)}
+.ex-head h2{font-size:19px; letter-spacing:-.015em}
+.prog{
+  font-family:var(--f-mono); font-size:12px; color:var(--ink-faint);
+  font-variant-numeric:tabular-nums;
+}
+.dots{display:flex; gap:4px; margin-left:auto}
+.dots i{width:8px; height:8px; border-radius:50%; background:var(--line); display:block}
+.dots i.ok{background:var(--ok)} .dots i.no{background:var(--bad)} .dots i.now{background:var(--ink-soft)}
+
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:18px; box-shadow:var(--shadow);
+}
+.q{font-family:var(--f-display); font-size:19px; font-weight:600; letter-spacing:-.01em; margin:0 0 4px; text-wrap:balance}
+.qsub{margin:0 0 14px; color:var(--ink-soft); font-size:14.5px}
+
+.figure{
+  background:var(--map-paper); border:1px solid var(--line-strong); border-radius:10px;
+  margin:0 0 14px; overflow:hidden;
+}
+.figure svg{display:block; width:100%; height:auto}
+.figcap{
+  font-family:var(--f-mono); font-size:11px; color:var(--ink-faint);
+  margin:-8px 0 14px; text-align:right;
+}
+
+.opts{display:grid; gap:8px}
+.opts.two{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.opts.sym{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+.opt{
+  background:var(--surface-2); border:1.5px solid transparent; border-radius:11px;
+  padding:11px 13px; cursor:pointer; text-align:left; font-size:15.5px;
+  display:flex; align-items:center; gap:10px; transition:border-color .12s, background .12s;
+}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt .key{
+  font-family:var(--f-mono); font-size:12px; font-weight:600; color:var(--ink-faint);
+  border:1px solid var(--line); border-radius:6px; width:22px; height:22px;
+  display:grid; place-items:center; flex:none;
+}
+.opt.sel{border-color:var(--ink-soft)}
+.opt.right{background:var(--ok-soft); border-color:var(--ok)}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad)}
+.opt.sym-opt{flex-direction:column; gap:6px; align-items:center; text-align:center; padding:12px 8px}
+.opt.sym-opt svg{background:var(--map-paper); border-radius:7px; padding:4px}
+
+.numrow{display:flex; gap:9px; align-items:center; flex-wrap:wrap}
+.numrow input{
+  font-family:var(--f-mono); font-size:22px; font-weight:600; width:150px;
+  padding:9px 12px; border-radius:11px; border:1.5px solid var(--line);
+  background:var(--surface-2); color:var(--ink); text-align:right;
+}
+.numrow input:focus{border-color:var(--accent); outline:none}
+.unit{font-family:var(--f-mono); font-size:17px; color:var(--ink-soft)}
+.check{
+  background:var(--accent); color:var(--surface); border:0; border-radius:11px;
+  padding:11px 20px; font-weight:600; cursor:pointer; font-size:15.5px;
+}
+.check:disabled{opacity:.4; cursor:default}
+.hintbtn{background:none; border:0; color:var(--ink-faint); font-size:13.5px; cursor:pointer; text-decoration:underline; padding:4px 0}
+
+.fb{margin-top:14px; border-radius:11px; padding:13px 15px; border:1px solid; display:none}
+.fb.on{display:block}
+.fb.good{background:var(--ok-soft); border-color:var(--ok)}
+.fb.bad{background:var(--bad-soft); border-color:var(--bad)}
+.fb h4{margin:0 0 5px; font-family:var(--f-display); font-size:16px}
+.fb.good h4{color:var(--ok)} .fb.bad h4{color:var(--bad)}
+.fb p{margin:0 0 6px; font-size:14.5px; line-height:1.5}
+.fb p:last-child{margin-bottom:0}
+.steps{
+  font-family:var(--f-mono); font-size:13.5px; background:var(--surface);
+  border-radius:8px; padding:9px 11px; margin:8px 0 0; display:grid; gap:3px;
+  border:1px solid var(--line); overflow-x:auto;
+}
+.next{
+  margin-top:12px; background:var(--ink); color:var(--paper); border:0; border-radius:11px;
+  padding:11px 20px; font-weight:600; cursor:pointer; font-size:15.5px;
+}
+
+.theory{
+  margin-top:12px; background:var(--surface-2); border:1px dashed var(--line-strong);
+  border-radius:11px; padding:0 15px; overflow:hidden;
+}
+.theory summary{
+  cursor:pointer; padding:11px 0; font-weight:600; font-size:14.5px; color:var(--accent);
+  list-style:none; display:flex; align-items:center; gap:7px;
+}
+.theory summary::-webkit-details-marker{display:none}
+.theory summary::before{content:"📐"; font-size:15px}
+.theory[open] summary{border-bottom:1px solid var(--line)}
+.theory .body{padding:11px 0 14px; font-size:14.5px; color:var(--ink-soft)}
+.theory .body b{color:var(--ink)}
+.theory .body ul{margin:7px 0; padding-left:20px}
+.theory .body li{margin-bottom:4px}
+.theory .body code{font-family:var(--f-mono); font-size:13px; background:var(--surface); padding:1px 5px; border-radius:5px; border:1px solid var(--line)}
+
+/* hotspot map */
+.hsmap .hs{cursor:pointer}
+.hsmap .hs .hit{fill:transparent; stroke:transparent; stroke-width:2}
+.hsmap .hs:hover .hit{fill:rgba(19,107,88,.13); stroke:#136B58; stroke-dasharray:4 3}
+.hsmap.locked .hs{cursor:default; pointer-events:none}
+.hsmap .hs.mark-ok .hit{fill:rgba(31,122,69,.2); stroke:#1F7A45; stroke-width:2.5; stroke-dasharray:none}
+.hsmap .hs.mark-no .hit{fill:rgba(179,58,43,.18); stroke:#B33A2B; stroke-width:2.5; stroke-dasharray:none}
+/* siatka: klikalne są same linie (szeroki, niewidoczny pas) i opisy A–F / 1–4 */
+.hsmap .hs .hitline path{stroke:transparent; stroke-width:12; fill:none}
+.hsmap .hs:hover .hitline path{stroke:rgba(19,107,88,.2)}
+.hsmap .hs.mark-ok .hitline path{stroke:rgba(31,122,69,.3)}
+.hsmap .hs.mark-no .hitline path{stroke:rgba(179,58,43,.28)}
+
+/* summary */
+.done{text-align:center; padding:22px 8px}
+.done .score{font-family:var(--f-display); font-size:52px; font-weight:800; letter-spacing:-.03em; line-height:1}
+.done .score small{font-size:22px; color:var(--ink-faint); font-weight:500}
+.done h3{font-size:22px; margin:10px 0 6px}
+.done p{color:var(--ink-soft); margin:0 auto 18px; max-width:40ch}
+.done-actions{display:flex; gap:9px; justify-content:center; flex-wrap:wrap}
+.ghost{
+  background:var(--surface); border:1px solid var(--line-strong); border-radius:11px;
+  padding:11px 20px; cursor:pointer; font-weight:600; font-size:15.5px;
+}
+
+.foot{margin-top:28px; font-size:12.5px; color:var(--ink-faint); text-align:center; line-height:1.6}
+
+/* ---------- seria ---------- */
+.streak{
+  font-family:var(--f-mono); font-size:13px; font-weight:600; font-variant-numeric:tabular-nums;
+  background:var(--warm-soft); color:var(--warm); border-radius:999px; padding:4px 11px;
+  display:inline-flex; align-items:center; gap:4px; white-space:nowrap;
+}
+.streak[hidden]{display:none}   /* display:inline-flex nie może nadpisać atrybutu hidden */
+
+/* ---------- opcje ---------- */
+.opts-wrap{position:relative}
+.opt-panel{
+  position:absolute; right:0; top:calc(100% + 8px); z-index:30; width:min(290px, calc(100vw - 32px));
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:12px 14px; display:grid; gap:10px;
+}
+.opt-panel[hidden]{display:none}
+.opt-title{font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+.opt-row{display:flex; align-items:center; gap:12px; justify-content:space-between}
+.opt-row b{display:block; font-size:15px}
+.opt-row small{display:block; font-size:12.5px; color:var(--ink-soft)}
+.switch{
+  flex:none; width:46px; height:26px; border-radius:999px; border:0; cursor:pointer; padding:3px;
+  background:var(--line-strong); display:flex; transition:background .2s;
+}
+.switch i{width:20px; height:20px; border-radius:50%; background:var(--surface); display:block; transition:transform .2s; box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.switch[aria-checked="true"]{background:var(--accent)}
+.switch[aria-checked="true"] i{transform:translateX(20px)}
+
+/* ---------- pojedynek ---------- */
+.p1{--pc:var(--accent); --pcs:var(--accent-soft)}
+.p2{--pc:var(--water); --pcs:var(--water-soft)}
+.board{display:flex; align-items:center; gap:8px; margin-left:auto; font-family:var(--f-mono); font-weight:600; font-variant-numeric:tabular-nums}
+.board .pl{padding:3px 10px; border-radius:999px; background:var(--pcs); color:var(--pc); font-size:13.5px; max-width:10em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.board .pl.now{outline:2px solid var(--pc); outline-offset:1px}
+.board .sc{font-size:17px}
+.turn{
+  display:flex; align-items:center; gap:10px; margin:0 0 12px; padding:10px 13px; border-radius:10px;
+  background:var(--pcs); color:var(--pc); font-weight:700; font-size:15px;
+  animation:stepIn .4s ease backwards;
+}
+.turn .who{font-family:var(--f-display); font-size:20px; letter-spacing:-.01em}
+.turn small{margin-left:auto; font-family:var(--f-mono); font-size:12px; font-weight:600; opacity:.85}
+.duel-form{display:grid; gap:14px}
+.duel-form label{display:grid; gap:5px; font-weight:600; font-size:14.5px}
+.duel-form input, .duel-form select{
+  font:inherit; font-size:16px; padding:10px 12px; border-radius:10px; border:1.5px solid var(--line);
+  background:var(--surface-2); color:var(--ink);
+}
+.duel-form input:focus, .duel-form select:focus{border-color:var(--accent); outline:none}
+.duel-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px}
+.duel-grid label span{display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--pc); margin-right:6px}
+.vs{font-family:var(--f-display); font-size:44px; font-weight:800; letter-spacing:-.02em; line-height:1.1}
+.vs .p1, .vs .p2{color:var(--pc)}
+.streak .fl{display:inline-block; transform-origin:50% 90%}
+.streak.hot .fl{animation:flick 1.1s ease-in-out infinite}
+.streak.bump{animation:bump .45s ease}
+@keyframes flick{0%,100%{transform:scale(1) rotate(-4deg)}50%{transform:scale(1.18) rotate(4deg)}}
+@keyframes bump{40%{transform:scale(1.22)}}
+.gain{font-family:var(--f-mono); font-size:13px; font-weight:600; margin-left:6px; color:var(--ok)}
+.gain.hot{color:var(--warm)}
+
+/* ---------- efekty w rozwiązaniach ----------
+   Wszystkie animacje startują ze stanu ukrytego (fill-mode: backwards), a stan końcowy
+   jest stanem spoczynkowym — przy wyłączonych animacjach wszystko jest od razu widoczne. */
+.steps > span{animation:stepIn .35s ease backwards; animation-delay:calc(var(--k, 0) * .5s)}
+@keyframes stepIn{from{opacity:0; transform:translateY(5px)}}
+.z{position:relative; display:inline-block; color:var(--ink-faint)}
+.z::after{
+  content:""; position:absolute; left:-2px; right:-2px; top:50%; height:2px; background:var(--bad);
+  transform:rotate(-14deg); animation:strike .28s ease backwards;
+  animation-delay:calc(var(--k, 0) * .5s + .45s + var(--j) * .2s);
+}
+@keyframes strike{from{transform:rotate(-14deg) scaleX(0)}}
+.zhint{font-style:normal; color:var(--bad); font-size:12px; margin-left:8px}
+
+/* reflektor: po odpowiedzi reszta mapy przygasa, zostaje wskazany element */
+.hsmap .hs{transition:opacity .5s ease}
+.hsmap.spot .hs:not(.focus){opacity:.2}
+/* w sprawdzianie pola nie podświetlają się po najechaniu — nic nie podpowiada */
+.hsmap.nohover .hs:hover .hit{fill:transparent; stroke:transparent}
+.hsmap.nohover .hs:hover .hitline path{stroke:transparent}
+
+/* wzgórze wyrasta z poziomic */
+.hill .ring{transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.hill.lift .ring{transform:translateY(calc(var(--i) * -11px))}
+.hill.lift .ring ellipse{filter:drop-shadow(0 5px 3px rgba(70,40,10,.3))}
+.profile{border-top:1px dashed var(--line-strong); animation:stepIn .5s ease backwards .5s}
+.profile .figcap{margin:0; padding:4px 10px 8px; text-align:left}
+.profil .line{stroke-dasharray:900; animation:draw 1.6s ease backwards .7s}
+.profil .area{animation:stepIn .8s ease backwards 1.6s}
+@keyframes draw{from{stroke-dashoffset:900}}
+
+/* poszukiwanie skarbu */
+.explorer{transition:transform 1.1s cubic-bezier(.45,.05,.3,1)}
+.chest{transform-box:fill-box; transform-origin:50% 100%; animation:pop .6s cubic-bezier(.2,1.6,.4,1) backwards 1s}
+@keyframes pop{from{transform:scale(0); opacity:0}}
+
+/* pieczątka i ocena */
+.stamp-wrap{display:grid; place-items:center; margin:4px 0 6px}
+.stamp{animation:stampIn .5s cubic-bezier(.3,1.5,.5,1) backwards .35s}
+@keyframes stampIn{from{transform:scale(2.3) rotate(-24deg); opacity:0}}
+.grade{
+  font-family:var(--f-display); font-size:76px; font-weight:800; line-height:1;
+  width:112px; height:112px; margin:0 auto; border-radius:50%; display:grid; place-items:center;
+  border:4px solid currentColor; animation:stampIn .5s cubic-bezier(.3,1.5,.5,1) backwards .2s;
+}
+.grade.g1,.grade.g2{color:var(--bad)} .grade.g3,.grade.g4{color:var(--warm)} .grade.g5,.grade.g6{color:var(--ok)}
+.grade-name{font-family:var(--f-display); font-size:20px; font-weight:700; margin-top:10px}
+.small-note{font-size:12.5px; color:var(--ink-faint); max-width:46ch; margin:8px auto 18px !important}
+.mastery{font-size:14px; color:var(--ink-soft)}
+.confetti{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:50}
+.done .figure{max-width:560px; margin:0 auto 14px}
+
+@media (max-width:460px){
+  .q{font-size:17.5px}
+  .numrow input{width:120px; font-size:19px}
+  .hero{padding-block:18px 14px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important; animation:none !important}
+}
+</style>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M15.6 8.4 13.4 13.4 8.4 15.6 10.6 10.6z" fill="currentColor"/>
+      </svg>
+      Czytam mapę
+    </div>
+    <div class="spacer"></div>
+    <div class="streak" id="streak" hidden title="Seria dobrych odpowiedzi"><span class="fl" aria-hidden="true">🔥</span><span id="streakN">0</span></div>
+    <div class="pts" id="pts">0 pkt</div>
+    <div class="opts-wrap">
+      <button class="iconbtn" id="optBtn" title="Opcje" aria-label="Opcje" aria-haspopup="true" aria-expanded="false" aria-controls="optPanel">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="opt-panel" id="optPanel" hidden>
+        <div class="opt-title">Opcje</div>
+        <div class="opt-row">
+          <span><b>Dźwięki</b><small>dzwoneczki, kroki, fanfary</small></span>
+          <button class="switch" id="soundSwitch" role="switch" aria-checked="true" aria-label="Dźwięki"><i></i></button>
+        </div>
+        <div class="opt-row">
+          <span><b>Ciemny motyw</b><small>łagodniejszy dla oczu wieczorem</small></span>
+          <button class="switch" id="themeSwitch" role="switch" aria-checked="false" aria-label="Ciemny motyw"><i></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <main id="home">
+    <div class="hero">
+      <div class="eyebrow">Geografia · klasa 5 · dział „Mapa Polski”</div>
+      <h1>Naucz się czytać mapę</h1>
+      <p>Skala i podziałka, obliczanie odległości, znaki umowne, kierunki świata, poziomice i wysokość. Każde ćwiczenie ma za każdym razem nowe liczby — możesz powtarzać bez końca.</p>
+    </div>
+
+    <section class="rank" id="rank" aria-label="Twój stopień i szlak z pieczątkami"></section>
+    <div class="actions" id="actions"></div>
+
+    <div class="sec-h"><h2>Ćwiczenia</h2><div class="rule"></div></div>
+    <div class="tiles" id="tiles"></div>
+
+    <div class="sec-h"><h2>Poszukiwanie skarbu</h2><div class="rule"></div></div>
+    <div class="missions" id="missions"></div>
+
+    <p class="foot">Zakres zgodny z działem „Mapa Polski” (geografia, klasa 5).<br>Wyniki zapisują się w tej przeglądarce.</p>
+  </main>
+
+  <section id="exercise" hidden></section>
+</div>
+
+<script>
+/* ============================================================
+   Czytam mapę — aplikacja do nauki czytania mapy (geografia kl. 5)
+   ============================================================ */
+
+/* ---------- drobne narzędzia ---------- */
+const $ = s => document.querySelector(s);
+const ri = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { const c = a.slice(); for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[c[i], c[j]] = [c[j], c[i]]; } return c; };
+/* liczba po polsku: przecinek dziesiętny, spacja co 3 cyfry */
+const num = n => {
+  const r = Math.round(n * 1000) / 1000;
+  const [i, d] = String(r).split('.');
+  const ii = i.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return d ? ii + ',' + d : ii;
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* wybiera n błędnych odpowiedzi różnych od poprawnej */
+function distract(correct, pool, n = 3) {
+  const out = [];
+  const seen = new Set([String(correct)]);
+  for (const v of shuffle(pool)) {
+    if (out.length >= n) break;
+    if (!seen.has(String(v))) { out.push(v); seen.add(String(v)); }
+  }
+  return out;
+}
+function mcq(correct, wrongs) { return shuffle([correct, ...wrongs]); }
+
+/* ---------- grafika: symbole kartograficzne ---------- */
+const SYMBOLS = {
+  las:      { name: 'las',            kind: 'powierzchniowy', svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-forest)"/><g fill="#2E6B36"><path d="M10 26l5-9 5 9z"/><rect x="14" y="26" width="2" height="3"/><path d="M22 27l5-10 5 10z"/><rect x="26" y="27" width="2" height="3"/><path d="M33 25l4-7 4 7z"/><rect x="36" y="25" width="2" height="3"/></g>` },
+  laka:     { name: 'łąka',           kind: 'powierzchniowy', svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-meadow)"/><g stroke="#5E8A2E" stroke-width="1.6" stroke-linecap="round"><path d="M12 27v-6M10 24l2-3 2 3"/><path d="M24 28v-6M22 25l2-3 2 3"/><path d="M36 27v-6M34 24l2-3 2 3"/></g>` },
+  bagno:    { name: 'bagno',          kind: 'powierzchniowy', svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><g stroke="#2C6FA6" stroke-width="1.8" stroke-linecap="round"><path d="M8 11h8M20 11h8M32 11h8M13 18h8M25 18h8M8 25h8M20 25h8M32 25h8"/></g>` },
+  jezioro:  { name: 'jezioro',        kind: 'powierzchniowy', svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><path d="M8 20c0-7 8-11 16-9s16 2 16 8-9 12-18 11S8 27 8 20z" fill="var(--map-water)" stroke="#2C6FA6" stroke-width="1.2"/>` },
+  rzeka:    { name: 'rzeka',          kind: 'liniowy',        svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><path d="M4 8c8 2 6 10 12 12s10 0 14 4 8 4 14 4" stroke="#2C6FA6" stroke-width="3" fill="none" stroke-linecap="round"/>` },
+  droga:    { name: 'droga',          kind: 'liniowy',        svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><path d="M3 24 45 12" stroke="#B5762A" stroke-width="5" fill="none"/><path d="M3 24 45 12" stroke="#F0C87A" stroke-width="2.6" fill="none"/>` },
+  kolej:    { name: 'linia kolejowa', kind: 'liniowy',        svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><path d="M4 18h40" stroke="#33413B" stroke-width="2.4"/><g stroke="#33413B" stroke-width="2.4"><path d="M9 13v10M17 13v10M25 13v10M33 13v10M41 13v10"/></g>` },
+  granica:  { name: 'granica państwa', kind: 'liniowy',       svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><path d="M4 26 14 12 24 22 34 10 45 20" stroke="#8B3F8B" stroke-width="2.4" fill="none" stroke-dasharray="7 3 2 3"/>` },
+  szczyt:   { name: 'szczyt góry',    kind: 'punktowy',       svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><path d="M24 11 30 22H18z" fill="#7A4A1E"/><text x="24" y="31" font-size="8" text-anchor="middle" fill="#33413B" font-family="monospace">612</text>` },
+  miasto:   { name: 'miasto',         kind: 'punktowy',       svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><circle cx="24" cy="16" r="6" fill="none" stroke="#33413B" stroke-width="2"/><circle cx="24" cy="16" r="2" fill="#33413B"/><text x="24" y="31" font-size="8" text-anchor="middle" fill="#33413B" font-family="sans-serif">Ostrów</text>` },
+  most:     { name: 'most',           kind: 'punktowy',       svg: `<rect x="2" y="2" width="44" height="32" fill="var(--map-paper)"/><path d="M24 2v32" stroke="#A8D0E8" stroke-width="9"/><path d="M24 2v32" stroke="#2C6FA6" stroke-width="1" opacity=".5"/><path d="M3 18h42" stroke="#33413B" stroke-width="3"/><g stroke="#33413B" stroke-width="1.8" fill="none"><path d="M16 12l3 3v6l-3 3M32 12l-3 3v6l3 3"/></g>` }
+};
+/* W quizie z rysunkami są tylko znaki, które wyglądają tak samo (albo prawie tak samo)
+   na większości map szkolnych i topograficznych. Obiekty, których symbole różnią się
+   między atlasami (kościół, zamek, schronisko…), pojawiają się tylko w pytaniach
+   o rodzaj znaku — tam liczy się nazwa, nie rysunek. */
+const KIND_ONLY = [
+  { name: 'kościół', kind: 'punktowy' }, { name: 'zamek', kind: 'punktowy' },
+  { name: 'schronisko górskie', kind: 'punktowy' }, { name: 'stacja kolejowa', kind: 'punktowy' },
+  { name: 'pomnik', kind: 'punktowy' }, { name: 'szlak turystyczny', kind: 'liniowy' },
+  { name: 'kanał', kind: 'liniowy' }, { name: 'autostrada', kind: 'liniowy' },
+  { name: 'pole uprawne', kind: 'powierzchniowy' }, { name: 'park narodowy', kind: 'powierzchniowy' },
+  { name: 'sad', kind: 'powierzchniowy' }
+];
+const symSvg = (k, s = 48) => `<svg viewBox="0 0 48 36" width="${s}" height="${s * .75}" aria-hidden="true">${SYMBOLS[k].svg}</svg>`;
+
+/* ---------- grafika: mapa okolic Lipowej ---------- */
+/* Jedna spójna mapka używana w kilku ćwiczeniach.
+   Obiekty mają stałe pozycje (w px viewBoxa) — z nich liczone są kierunki świata. */
+const PLACES = {
+  szkola:    { label: 'szkoła',              x: 214, y: 268 },
+  kosciol:   { label: 'kościół w Lipowej',   x: 246, y: 246 },
+  jezioro:   { label: 'Jezioro Krogulec',    x: 430, y: 138 },
+  szczyt:    { label: 'Sowia Góra',          x: 132, y: 150 },
+  stacja:    { label: 'stacja kolejowa',     x: 352, y: 320 },
+  mlyn:      { label: 'młyn nad Bystrzycą',  x: 300, y: 122 },
+  lesniczy:  { label: 'leśniczówka',         x: 118, y: 330 }
+};
+
+function mapSvg(opts = {}) {
+  const o = Object.assign({ hotspots: false, points: null, ruler: false }, opts);
+  const hs = (k, x, y, w, h, inner) => o.hotspots
+    ? `<g class="hs" data-k="${k}">${inner}<rect class="hit" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/></g>`
+    : inner;
+
+  const gridLines = [120, 200, 280, 360, 440].map(x => `<path d="M${x} 50V366"/>`).join('')
+    + [126, 206, 286].map(y => `<path d="M44 ${y}H514"/>`).join('');
+  const grid = `<g stroke="#9DA79C" stroke-width=".6" opacity=".75">${gridLines}</g>
+    <g font-family="monospace" font-size="10" fill="#6B7A6E">
+      ${['A', 'B', 'C', 'D', 'E', 'F'].map((c, i) => `<text x="${82 + i * 79}" y="44" text-anchor="middle">${c}</text>`).join('')}
+      ${['1', '2', '3', '4'].map((r, i) => `<text x="32" y="${92 + i * 80}" text-anchor="middle">${r}</text>`).join('')}
+    </g>`;
+  /* Siatka nie może zasłaniać treści mapy: klikalne są tylko jej linie i opisy
+     (pasek liter nad ramką, pasek cyfr po lewej). Resztę wnętrza ramki łapie „treść”. */
+  const gridBlock = o.hotspots
+    ? `<g class="hs" data-k="siatka">${grid}
+        <g class="hitline">${gridLines}</g>
+        <rect class="hit" x="44" y="32" width="470" height="16" rx="4"/>
+        <rect class="hit" x="22" y="50" width="20" height="316" rx="4"/>
+      </g>`
+    : grid;
+
+  const pts = (o.points || []).map(p => `
+      <g>
+        <circle cx="${p.x}" cy="${p.y}" r="5.5" fill="#B33A2B" stroke="#FBFAF4" stroke-width="2"/>
+        <text x="${p.x + 9}" y="${p.y + 5}" font-family="monospace" font-size="15" font-weight="bold" fill="#B33A2B">${p.n}</text>
+      </g>`).join('') +
+    (o.points && o.points.length === 2
+      ? `<path d="M${o.points[0].x} ${o.points[0].y}L${o.points[1].x} ${o.points[1].y}" stroke="#B33A2B" stroke-width="2" stroke-dasharray="6 4"/>` : '');
+
+  return `<svg viewBox="0 0 560 400" class="mapfig" role="img" aria-label="Przykładowa mapa okolic Lipowej">
+    <rect width="560" height="400" fill="#FBFAF4"/>
+
+    <!-- treść mapy -->
+    ${hs('tresc', 44, 50, 470, 316, `
+      <g>
+        <rect x="44" y="50" width="470" height="316" fill="#F4F1E4"/>
+        <path d="M44 50h180c30 30 10 70 40 96s90 10 110 44 -20 70 30 96H44z" fill="#E4EFC8"/>
+        <path d="M60 60c60-6 120 4 150 40s-6 76-60 84-110-14-120-62 -10-56 30-62z" fill="#BFD9A8"/>
+        <g fill="#2E6B36" opacity=".85">
+          ${[[86, 118], [112, 96], [140, 120], [96, 150], [126, 156], [158, 100], [70, 92], [166, 140], [104, 182], [140, 186]].map(([x, y]) => `<path d="M${x} ${y}l6-11 6 11z"/><rect x="${x + 5}" y="${y}" width="2" height="4" fill="#2E6B36"/>`).join('')}
+        </g>
+        <!-- jezioro -->
+        <path d="M392 108c26-8 56 0 62 18s-10 36-38 40-56-6-58-24 8-26 34-34z" fill="#A8D0E8" stroke="#2C6FA6" stroke-width="1.2"/>
+        <text x="430" y="152" font-family="Georgia,serif" font-style="italic" font-size="12" fill="#2C6FA6" text-anchor="middle">Jezioro Krogulec</text>
+        <!-- rzeka -->
+        <path d="M150 62c18 30 38 38 68 44s62 6 84 18 30 22 60 22 32-4 32-4" stroke="#2C6FA6" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <text x="236" y="96" font-family="Georgia,serif" font-style="italic" font-size="11" fill="#2C6FA6" transform="rotate(14 236 96)">Bystrzyca</text>
+        <!-- droga -->
+        <path d="M48 320 180 292 262 250 360 240 512 196" stroke="#B5762A" stroke-width="7" fill="none" stroke-linejoin="round"/>
+        <path d="M48 320 180 292 262 250 360 240 512 196" stroke="#F0C87A" stroke-width="3.6" fill="none" stroke-linejoin="round"/>
+        <!-- kolej -->
+        <path d="M60 360 250 344 420 300 514 296" stroke="#33413B" stroke-width="2.4" fill="none"/>
+        <g stroke="#33413B" stroke-width="2.2">
+          ${[[92, 357], [140, 353], [190, 349], [240, 345], [292, 332], [344, 319], [396, 306], [448, 298]].map(([x, y]) => `<path d="M${x} ${y - 5}l1 10" transform="rotate(-6 ${x} ${y})"/>`).join('')}
+        </g>
+        <!-- wieś -->
+        <g fill="#8A6A55">
+          ${[[228, 258], [240, 266], [252, 254], [262, 264], [236, 276], [254, 274], [268, 250]].map(([x, y]) => `<rect x="${x}" y="${y}" width="7" height="6"/>`).join('')}
+        </g>
+        <g fill="#33413B">
+          <rect x="244" y="240" width="5" height="9"/><path d="M246.5 231v6M244 234h5" stroke="#33413B" stroke-width="1.5"/>
+          <path d="M246.5 236l4 4h-8z"/>
+        </g>
+        <text x="258" y="292" font-family="sans-serif" font-size="13" font-weight="bold" fill="#33413B">Lipowa</text>
+        <!-- szkoła -->
+        <g><rect x="208" y="262" width="11" height="9" fill="#B33A2B"/><path d="M213.5 262v-7h7l-2 2.5 2 2.5h-7" fill="#B33A2B"/></g>
+        <!-- stacja -->
+        <g><rect x="345" y="314" width="13" height="8" fill="#33413B"/><text x="352" y="336" font-family="sans-serif" font-size="9.5" fill="#33413B" text-anchor="middle">Lipowa Wąs.</text></g>
+        <!-- szczyt -->
+        <g><path d="M126 144l7 12h-14z" fill="#7A4A1E"/><text x="132" y="170" font-family="monospace" font-size="10" fill="#33413B" text-anchor="middle">218 m</text>
+          <text x="132" y="136" font-family="Georgia,serif" font-size="11" fill="#5A4326" text-anchor="middle">Sowia Góra</text></g>
+        <!-- leśniczówka -->
+        <g><path d="M112 324l7 8h-14z" fill="#1F7A45"/><rect x="114" y="332" width="9" height="7" fill="#1F7A45"/></g>
+        <!-- młyn -->
+        <g><rect x="295" y="117" width="10" height="9" fill="#6B4A2E"/></g>
+      </g>`)}
+
+    ${gridBlock}
+    ${pts}
+
+    <!-- ramka -->
+    <rect x="44" y="50" width="470" height="316" fill="none" stroke="#33413B" stroke-width="2"/>
+
+    <!-- tytuł -->
+    ${hs('tytul', 40, 3, 210, 27, `<text x="44" y="24" font-family="Georgia,serif" font-size="21" font-weight="bold" fill="#1B2A24">Okolice Lipowej</text>`)}
+
+    <!-- róża wiatrów -->
+    ${hs('roza', 456, 58, 52, 62, `
+      <g transform="translate(482,88)">
+        <circle r="21" fill="#FBFAF4" fill-opacity=".9" stroke="#33413B" stroke-width="1"/>
+        <path d="M0-19 5-3 0 1 -5-3z" fill="#B33A2B"/>
+        <path d="M0 19 5 3 0-1 -5 3z" fill="#33413B"/>
+        <text y="-22" font-family="sans-serif" font-size="11" font-weight="bold" fill="#B33A2B" text-anchor="middle">N</text>
+        <text y="31" font-family="sans-serif" font-size="10" fill="#33413B" text-anchor="middle">S</text>
+        <text x="27" y="4" font-family="sans-serif" font-size="10" fill="#33413B" text-anchor="middle">E</text>
+        <text x="-27" y="4" font-family="sans-serif" font-size="10" fill="#33413B" text-anchor="middle">W</text>
+      </g>`)}
+
+    <!-- legenda -->
+    ${hs('legenda', 44, 372, 250, 26, `
+      <g font-family="sans-serif" font-size="10.5" fill="#33413B">
+        <rect x="46" y="372" width="246" height="24" fill="#FBFAF4" stroke="#9FB29C"/>
+        <rect x="52" y="379" width="12" height="9" fill="#BFD9A8"/><text x="68" y="387">las</text>
+        <path d="M92 384h14" stroke="#2C6FA6" stroke-width="3"/><text x="110" y="387">rzeka</text>
+        <path d="M148 384h14" stroke="#B5762A" stroke-width="4"/><text x="166" y="387">droga</text>
+        <path d="M204 388l4-7 4 7z" fill="#7A4A1E"/><text x="216" y="387">szczyt</text>
+      </g>`)}
+
+    <!-- skala i podziałka -->
+    ${hs('skala', 330, 372, 184, 26, `
+      <g font-family="monospace" font-size="10.5" fill="#33413B">
+        <text x="336" y="380">1 : 50 000</text>
+        <g transform="translate(410,374)">
+          <rect x="0" y="0" width="22" height="7" fill="#33413B"/><rect x="22" y="0" width="22" height="7" fill="#FBFAF4" stroke="#33413B" stroke-width=".8"/>
+          <rect x="44" y="0" width="22" height="7" fill="#33413B"/><rect x="66" y="0" width="22" height="7" fill="#FBFAF4" stroke="#33413B" stroke-width=".8"/>
+          <text x="0" y="18" text-anchor="middle">0</text><text x="44" y="18" text-anchor="middle">1</text><text x="88" y="18" text-anchor="middle">2 km</text>
+        </g>
+      </g>`)}
+
+    <!-- poszukiwanie skarbu: przebyta trasa, skrzynia, znacznik odkrywcy -->
+    ${o.trail && o.trail.length > 1 ? `<polyline points="${o.trail.map(p => p.join(',')).join(' ')}" fill="none" stroke="#B33A2B" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>` : ''}
+    ${o.treasure ? chestSvg(o.treasure.x + 20, o.treasure.y - 2) : ''}
+    ${o.explorer ? explorerSvg(o.explorer) : ''}
+  </svg>`;
+}
+
+/* Znacznik odkrywcy (chorągiewka). Pozycja w stylu CSS, żeby przejście było animowane. */
+function explorerSvg(p) {
+  return `<g id="explorer" class="explorer" style="transform:translate(${p.x}px,${p.y}px)">
+    <ellipse cx="0" cy="2" rx="9" ry="3.5" fill="#000" opacity=".2"/>
+    <path d="M0 0V-30" stroke="#1B2A24" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M0 -30 14 -25 0 -20z" fill="#F2B233" stroke="#1B2A24" stroke-width="1.2" stroke-linejoin="round"/>
+    <circle r="6.5" fill="#B33A2B" stroke="#FBFAF4" stroke-width="2.5"/>
+  </g>`;
+}
+function chestSvg(x, y) {
+  return `<g transform="translate(${x},${y})"><g class="chest">
+    <circle cy="-4" r="20" fill="#F2C94C" opacity=".4"/>
+    <rect x="-12" y="-9" width="24" height="15" rx="2" fill="#8A5A2B" stroke="#3B2410" stroke-width="1.5"/>
+    <path d="M-12 -9q12-12 24 0z" fill="#A0692F" stroke="#3B2410" stroke-width="1.5"/>
+    <rect x="-3" y="-7" width="6" height="7" rx="1" fill="#F2C94C" stroke="#3B2410" stroke-width="1"/>
+  </g></g>`;
+}
+
+/* ---------- grafika: podziałka liniowa z odcinkiem do zmierzenia ---------- */
+function podzialkaSvg(kmPerSeg, segs, lenSegs) {
+  const W = 64; // px na działkę
+  const x0 = 44, y = 74;
+  const bars = [], ticks = [], labels = [];
+  for (let i = 0; i < segs; i++) {
+    bars.push(`<rect x="${x0 + i * W}" y="${y}" width="${W}" height="11" fill="${i % 2 ? '#FBFAF4' : '#33413B'}" stroke="#33413B" stroke-width="1"/>`);
+    /* kreska połówkowa — dzięki niej odcinek 1,5 czy 3,5 działki odczytuje się dokładnie */
+    ticks.push(`<path d="M${x0 + i * W + W / 2} ${y - 5}v5" stroke="#33413B" stroke-width="1.4"/>`);
+  }
+  for (let i = 0; i <= segs; i++) {
+    ticks.push(`<path d="M${x0 + i * W} ${y - 9}v9" stroke="#33413B" stroke-width="1.6"/>`);
+    labels.push(`<text x="${x0 + i * W}" y="${y + 27}" font-family="monospace" font-size="12" fill="#33413B" text-anchor="middle">${num(i * kmPerSeg)}${i === segs ? ' km' : ''}</text>`);
+  }
+  const abLen = lenSegs * W;
+  const xB = x0 + abLen;
+  return `<svg viewBox="0 0 ${x0 * 2 + segs * W} 116" role="img" aria-label="Podziałka liniowa z odcinkiem A–B">
+    <rect width="100%" height="100%" fill="#FBFAF4"/>
+    <g>
+      <path d="M${x0} 34V${y - 1}M${xB} 34V${y - 1}" stroke="#B33A2B" stroke-width="1.2" stroke-dasharray="3 3" opacity=".75"/>
+      <path d="M${x0} 30h${abLen}" stroke="#B33A2B" stroke-width="3"/>
+      <path d="M${x0} 22v16M${xB} 22v16" stroke="#B33A2B" stroke-width="3"/>
+      <text x="${x0 - 10}" y="22" font-family="monospace" font-size="15" font-weight="bold" fill="#B33A2B" text-anchor="middle">A</text>
+      <text x="${xB + 10}" y="22" font-family="monospace" font-size="15" font-weight="bold" fill="#B33A2B" text-anchor="middle">B</text>
+    </g>
+    ${bars.join('')}
+    ${ticks.join('')}
+    ${labels.join('')}
+  </svg>`;
+}
+
+/* ---------- grafika: mapa poziomicowa ---------- */
+/* Wzgórze: poziomice co `ci` metrów, wschodni stok stromszy. */
+function poziomiceSvg(base, ci, marks) {
+  const rings = [
+    { cx: 250, cy: 150, rx: 180, ry: 108, lv: 0 },
+    { cx: 266, cy: 150, rx: 138, ry: 84, lv: 1 },
+    { cx: 282, cy: 150, rx: 96, ry: 58, lv: 2 },
+    { cx: 298, cy: 150, rx: 54, ry: 33, lv: 3 }
+  ];
+  const fills = ['#EFE3CE', '#E7D6B8', '#DDC69F', '#D2B482'];
+  /* Opis wysokości stoi na górze każdej poziomicy (jak na prawdziwych mapach, z przerwą w linii),
+     a punkty A–D leżą na lewych krańcach — więc liczby nigdy nie są zasłonięte. */
+  /* Każda poziomica to osobna warstwa (--i = numer warstwy). Po odpowiedzi warstwy
+     unoszą się jedna nad drugą (klasa .lift) i z płaskiej mapy „wyrasta” wzgórze.
+     Opisy na górze warstwy i-tej nie wchodzą pod warstwę i+1 — także po uniesieniu. */
+  const body = rings.map((r, i) =>
+    `<g class="ring" style="--i:${i}">
+       <ellipse cx="${r.cx}" cy="${r.cy}" rx="${r.rx}" ry="${r.ry}" fill="${fills[i]}" stroke="#B07A3C" stroke-width="1.5"/>
+       <rect x="${r.cx - 17}" y="${r.cy - r.ry - 8}" width="34" height="15" rx="3" fill="${fills[i]}"/>
+       <text x="${r.cx}" y="${r.cy - r.ry + 4}" font-family="monospace" font-size="12" font-weight="600" fill="#8A5A22" text-anchor="middle">${base + i * ci}</text>
+     </g>`
+  ).join('');
+  const pins = (marks || []).map(m =>
+    `<g class="ring pin" style="--i:${m.i || 0}"><circle cx="${m.x}" cy="${m.y}" r="5" fill="#B33A2B" stroke="#FBFAF4" stroke-width="2"/>
+      <text x="${m.x + 8}" y="${m.y - 6}" font-family="monospace" font-size="15" font-weight="bold" fill="#B33A2B">${m.n}</text></g>`
+  ).join('');
+  return `<svg viewBox="0 0 500 300" class="hill" role="img" aria-label="Mapa poziomicowa wzgórza">
+    <rect width="500" height="300" fill="#FBFAF4"/>
+    ${body}
+    <g class="ring" style="--i:3.4"><path d="M298 138l8 14h-16z" fill="#7A4A1E"/>
+      <text x="298" y="168" font-family="monospace" font-size="12" fill="#5A4326" text-anchor="middle">${base + 3 * ci + Math.round(ci * .8)} m</text></g>
+    ${pins}
+    <text x="12" y="290" font-family="monospace" font-size="11" fill="#6B7A6E">cięcie poziomicowe: ${ci} m</text>
+  </svg>`;
+}
+
+/* ---------- grafika: skala barw hipsometrycznych ---------- */
+/* Każdy kolor ma dokładnie jedno znaczenie. Zielenie = niziny (do 300 m n.p.m.),
+   żółty = wyżyny, brązy = góry. Depresja ma własny, najciemniejszy odcień zieleni. */
+const HIPSO = [
+  { c: '#1F5A2E', t: 'ciemnozielony', r: [-2, 0], txt: 'poniżej poziomu morza (depresja)', short: 'poniżej 0', kraina: 'depresja — np. Żuławy Wiślane' },
+  { c: '#4E9A4F', t: 'zielony', r: [0, 200], txt: '0–200 m n.p.m.', short: '0–200', kraina: 'niziny' },
+  { c: '#A8CD74', t: 'jasnozielony', r: [200, 300], txt: '200–300 m n.p.m.', short: '200–300', kraina: 'niziny (ich najwyższe części)' },
+  { c: '#EAD878', t: 'żółty', r: [300, 500], txt: '300–500 m n.p.m.', short: '300–500', kraina: 'wyżyny' },
+  { c: '#D39E55', t: 'jasnobrązowy', r: [500, 1000], txt: '500–1000 m n.p.m.', short: '500–1000', kraina: 'góry niskie i średnie' },
+  { c: '#A66A2C', t: 'brązowy', r: [1000, 2000], txt: '1000–2000 m n.p.m.', short: '1000–2000', kraina: 'góry wysokie' },
+  { c: '#6E3F17', t: 'ciemnobrązowy', r: [2000, 2499], txt: 'powyżej 2000 m n.p.m.', short: 'pow. 2000', kraina: 'najwyższe szczyty (Tatry)' }
+];
+function hipsoSvg() {
+  const w = 74;
+  return `<svg viewBox="0 0 ${28 + HIPSO.length * w} 112" role="img" aria-label="Skala barw hipsometrycznych">
+    <rect width="100%" height="100%" fill="#FBFAF4"/>
+    <text x="14" y="24" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1B2A24">Wysokość w metrach n.p.m.</text>
+    ${HIPSO.map((h, i) => `
+      <rect x="${14 + i * w}" y="36" width="${w}" height="26" fill="${h.c}" stroke="#8A9A88" stroke-width=".8"/>
+      <text x="${14 + i * w + w / 2}" y="80" font-family="monospace" font-size="11" fill="#33413B" text-anchor="middle">${h.short}</text>
+      <text x="${14 + i * w + w / 2}" y="96" font-family="monospace" font-size="9" fill="#6B7A6E" text-anchor="middle">${h.t}</text>
+    `).join('')}
+  </svg>`;
+}
+
+/* ---------- kierunki świata ---------- */
+const DIRS = [
+  { d: 'północ', s: 'N' }, { d: 'północny wschód', s: 'NE' }, { d: 'wschód', s: 'E' }, { d: 'południowy wschód', s: 'SE' },
+  { d: 'południe', s: 'S' }, { d: 'południowy zachód', s: 'SW' }, { d: 'zachód', s: 'W' }, { d: 'północny zachód', s: 'NW' }
+];
+function dirBetween(from, to) {
+  const dx = to.x - from.x, dy = from.y - to.y;           // y rośnie w dół → odwracamy
+  let a = Math.atan2(dy, dx) * 180 / Math.PI;             // 0° = wschód
+  a = (450 - a) % 360;                                    // 0° = północ, zgodnie ze wskazówkami
+  const i = Math.round(a / 45) % 8;
+  const dev = Math.abs(a - Math.round(a / 45) * 45);     // odchylenie od „czystego” kierunku
+  return Object.assign({ dev }, DIRS[i]);
+}
+/* Tylko pary miejsc, które leżą wyraźnie w jednym kierunku (odchylenie ≤ 10°).
+   Pary bliskie granicy dwóch kierunków (np. prawie N, prawie NE) są pomijane. */
+const DIR_PAIRS = [];
+for (const a of Object.keys(PLACES)) for (const b of Object.keys(PLACES)) {
+  if (a !== b && dirBetween(PLACES[a], PLACES[b]).dev <= 10) DIR_PAIRS.push([a, b]);
+}
+
+/* ============================================================
+   MODUŁY — każdy ma teorię i generator pytań
+   ============================================================ */
+
+const M = [];
+
+/* --- 1. Elementy mapy (klikanie po mapie) --- */
+const ELEMENTS = {
+  tytul: { n: 'tytuł mapy', o: 'mówi, jaki obszar przedstawia mapa' },
+  legenda: { n: 'legenda', o: 'objaśnia znaczenie znaków umownych' },
+  skala: { n: 'skala i podziałka liniowa', o: 'pokazuje, ile razy mapa jest zmniejszona' },
+  roza: { n: 'róża wiatrów (kierunki świata)', o: 'pokazuje, gdzie na mapie jest północ' },
+  siatka: { n: 'siatka kartograficzna', o: 'składa się z linii i oznaczeń (A–F, 1–4), które pomagają znaleźć obiekt' },
+  tresc: { n: 'treść mapy', o: 'przedstawia sam teren: rzeki, lasy, drogi, osiedla' }
+};
+M.push({
+  id: 'elementy', ikona: '🗺️', title: 'Elementy mapy',
+  desc: 'Znajdź tytuł, legendę, skalę i różę wiatrów na prawdziwej mapce.',
+  theory: `<b>Każda mapa ma pięć stałych elementów:</b>
+    <ul>
+      <li><b>tytuł</b> — jaki obszar przedstawia,</li>
+      <li><b>legenda</b> — objaśnia znaki umowne,</li>
+      <li><b>skala</b> (liczbowa i podziałka liniowa) — ile razy zmniejszono teren,</li>
+      <li><b>kierunki świata</b> — zwykle strzałka lub róża wiatrów; jeśli jej nie ma, przyjmujemy, że góra mapy to północ,</li>
+      <li><b>siatka kartograficzna</b> — linie ułatwiające znalezienie miejsca.</li>
+    </ul>
+    To, co mapa pokazuje (rzeki, lasy, drogi, miejscowości), nazywamy <b>treścią mapy</b>.`,
+  gen() {
+    if (Math.random() < .68) {
+      const k = pick(Object.keys(ELEMENTS));
+      return {
+        kind: 'hotspot',
+        q: `Kliknij na mapie: <b>${ELEMENTS[k].n}</b>`,
+        sub: 'Najedź myszką — pola elementów się podświetlają.',
+        fig: mapSvg({ hotspots: true }),
+        correct: k,
+        names: Object.fromEntries(Object.entries(ELEMENTS).map(([kk, v]) => [kk, v.n])),
+        why: `<b>${ELEMENTS[k].n}</b> — ${ELEMENTS[k].o}.`
+      };
+    }
+    const k = pick(Object.keys(ELEMENTS));
+    const correct = ELEMENTS[k].n;
+    return {
+      kind: 'choice',
+      q: `Który element mapy ${ELEMENTS[k].o}?`,
+      options: mcq(correct, distract(correct, Object.values(ELEMENTS).map(v => v.n))),
+      correct,
+      why: `To <b>${correct}</b>. ${ELEMENTS[k].o.charAt(0).toUpperCase() + ELEMENTS[k].o.slice(1)}.`
+    };
+  }
+});
+
+/* --- 2. Kierunki świata --- */
+M.push({
+  id: 'kierunki', ikona: '🧭', title: 'Kierunki świata',
+  desc: 'W którym kierunku od szkoły leży jezioro? Główne i pośrednie kierunki.',
+  theory: `Na mapie <b>góra to północ (N)</b>, dół — południe (S), prawa strona — wschód (E), lewa — zachód (W).
+    <ul>
+      <li><b>Kierunki główne:</b> północ, południe, wschód, zachód.</li>
+      <li><b>Kierunki pośrednie</b> leżą między nimi: północny wschód (NE), południowy wschód (SE), południowy zachód (SW), północny zachód (NW).</li>
+    </ul>
+    Nazwę pośrednią czytamy tak: <b>najpierw północ albo południe</b>, potem wschód albo zachód — mówimy „północny wschód”, nigdy „wschodnia północ”.`,
+  gen() {
+    const t = Math.random();
+    if (t < .2) {
+      const d = pick(DIRS);
+      return {
+        kind: 'choice',
+        q: `Jaki kierunek oznacza na mapie skrót <b>${d.s}</b>?`,
+        options: mcq(d.d, distract(d.d, DIRS.map(x => x.d))),
+        correct: d.d,
+        why: `<b>${d.s}</b> to ${d.d}. Skróty pochodzą z angielskiego: North, South, East, West.`
+      };
+    }
+    const [a, b] = pick(DIR_PAIRS);
+    const A = PLACES[a], B = PLACES[b];
+    const dir = dirBetween(A, B);
+    return {
+      kind: 'choice',
+      q: `W którym kierunku od miejsca <b>${A.label}</b> leży <b>${B.label}</b>?`,
+      sub: 'Pamiętaj: góra mapy to północ.',
+      fig: mapSvg({ points: [{ ...A, n: 'A' }, { ...B, n: 'B' }] }),
+      figcap: `A — ${A.label} · B — ${B.label}`,
+      options: mcq(dir.d, distract(dir.d, DIRS.map(x => x.d))),
+      correct: dir.d,
+      why: `Z punktu A (${A.label}) patrzymy w stronę B (${B.label}): to kierunek <b>${dir.d} (${dir.s})</b>.`
+    };
+  }
+});
+
+/* --- 3. Znaki umowne --- */
+M.push({
+  id: 'znaki', ikona: '⛰️', title: 'Znaki umowne',
+  desc: 'Symbole z legendy: punktowe, liniowe i powierzchniowe.',
+  theory: `<b>Znaki umowne</b> to umówione symbole, którymi zaznacza się obiekty na mapie. Dzielimy je na trzy grupy:
+    <ul>
+      <li><b>punktowe</b> — pokazują położenie obiektu w jednym miejscu: szczyt, kościół, zamek, most, miasto;</li>
+      <li><b>liniowe</b> — ciągną się wzdłuż linii: rzeka, droga, linia kolejowa, granica;</li>
+      <li><b>powierzchniowe</b> — zajmują pewien obszar: las, łąka, jezioro, bagno.</li>
+    </ul>
+    Znaczenie znaków wyjaśnia <b>legenda</b> — bez niej mapy nie da się odczytać.
+    <br><br><b>Uwaga:</b> na różnych mapach ten sam obiekt może mieć trochę inny znak (inny kolor, inny kształt).
+    Dlatego zanim zaczniesz czytać nową mapę, <b>zawsze najpierw zajrzyj do jej legendy</b>.
+    Znaki w tym ćwiczeniu to te najczęściej spotykane — np. las jest prawie zawsze zielony, a woda niebieska.`,
+  gen() {
+    const keys = Object.keys(SYMBOLS);
+    const t = Math.random();
+    if (t < .45) {
+      const k = pick(keys);
+      const wrong = distract(k, keys, 3);
+      const opts = shuffle([k, ...wrong]);
+      return {
+        kind: 'choice', symbols: true,
+        q: `Który znak umowny oznacza: <b>${SYMBOLS[k].name}</b>?`,
+        options: opts.map(x => ({ v: x, html: symSvg(x, 74) })),
+        correct: k,
+        why: `To znak <b>${SYMBOLS[k].name}</b> — znak <b>${SYMBOLS[k].kind}</b>.`
+      };
+    }
+    if (t < .75) {
+      const k = pick(keys);
+      return {
+        kind: 'choice',
+        q: 'Co oznacza ten znak umowny?',
+        fig: `<div style="display:grid;place-items:center;padding:18px">${symSvg(k, 116)}</div>`,
+        options: mcq(SYMBOLS[k].name, distract(SYMBOLS[k].name, keys.map(x => SYMBOLS[x].name))),
+        correct: SYMBOLS[k].name,
+        why: `To <b>${SYMBOLS[k].name}</b>, czyli znak <b>${SYMBOLS[k].kind}</b>.`
+      };
+    }
+    const o = pick([...keys.map(x => SYMBOLS[x]), ...KIND_ONLY]);
+    const correct = 'znak ' + o.kind;
+    return {
+      kind: 'choice',
+      q: `Do jakiej grupy należy znak oznaczający <b>${o.name}</b>?`,
+      options: shuffle(['znak punktowy', 'znak liniowy', 'znak powierzchniowy']),
+      correct,
+      why: `<b>${o.name.charAt(0).toUpperCase() + o.name.slice(1)}</b> zaznaczamy znakiem <b>${o.kind}m</b>${o.kind === 'punktowy' ? ' — obiekt zajmuje na mapie jedno miejsce.' : o.kind === 'liniowy' ? ' — obiekt ciągnie się wzdłuż linii.' : ' — obiekt zajmuje pewną powierzchnię.'}`
+    };
+  }
+});
+
+/* --- 4. Skala: liczbowa i mianowana --- */
+const SKALE = [
+  { d: 1000, m: '1 cm – 10 m' }, { d: 2000, m: '1 cm – 20 m' }, { d: 5000, m: '1 cm – 50 m' },
+  { d: 10000, m: '1 cm – 100 m' }, { d: 25000, m: '1 cm – 250 m' }, { d: 50000, m: '1 cm – 500 m' },
+  { d: 100000, m: '1 cm – 1 km' }, { d: 200000, m: '1 cm – 2 km' }, { d: 500000, m: '1 cm – 5 km' },
+  { d: 1000000, m: '1 cm – 10 km' }, { d: 2000000, m: '1 cm – 20 km' }
+];
+const skalaTxt = d => '1 : ' + num(d);
+M.push({
+  id: 'skala', ikona: '📏', title: 'Skala liczbowa i mianowana',
+  desc: 'Zamiana 1 : 50 000 na „1 cm – 500 m” i odwrotnie.',
+  theory: `<b>Skala</b> mówi, ile razy odległości na mapie są zmniejszone w stosunku do rzeczywistych.
+    <ul>
+      <li><b>Skala liczbowa:</b> <code>1 : 50 000</code> — 1 cm na mapie to 50 000 cm w terenie.</li>
+      <li><b>Skala mianowana:</b> <code>1 cm – 500 m</code> — to samo, ale zapisane w wygodnych jednostkach.</li>
+      <li><b>Podziałka liniowa</b> — odcinek z podpisanymi kilometrami; mierzy się nim wprost na mapie.</li>
+    </ul>
+    <b>Zamiana:</b> dzielimy mianownik przez 100 → dostajemy metry. <code>50 000 cm : 100 = 500 m</code>.
+    Żeby mieć kilometry, dzielimy przez 100 000.`,
+  gen() {
+    const s = pick(SKALE);
+    const t = Math.random();
+    if (t < .4) {
+      return {
+        kind: 'choice',
+        q: `Jak brzmi skala mianowana dla skali <b>${skalaTxt(s.d)}</b>?`,
+        options: mcq(s.m, distract(s.m, SKALE.map(x => x.m))),
+        correct: s.m,
+        steps: [stepZ(s.d, 100, 'm')],
+        why: `1 cm na mapie odpowiada ${num(s.d)} cm w terenie, czyli <b>${s.m.split('– ')[1]}</b>.`
+      };
+    }
+    if (t < .7) {
+      const c = skalaTxt(s.d);
+      return {
+        kind: 'choice',
+        q: `Skala mianowana mapy to <b>${s.m}</b>. Jaka jest jej skala liczbowa?`,
+        options: mcq(c, distract(c, SKALE.map(x => skalaTxt(x.d)))),
+        correct: c,
+        steps: [`${s.m.split('– ')[1]} = ${num(s.d)} cm`, `czyli ${c}`],
+        why: `Zamieniamy na centymetry: ${s.m.split('– ')[1]} to ${num(s.d)} cm, więc skala wynosi <b>${c}</b>.`
+      };
+    }
+    const correct = num(s.d / 100);
+    return {
+      kind: 'number',
+      q: `Ile metrów w terenie odpowiada <b>1 cm</b> na mapie w skali <b>${skalaTxt(s.d)}</b>?`,
+      unit: 'm', value: s.d / 100,
+      steps: [`1 cm na mapie = ${num(s.d)} cm w terenie`, stepZ(s.d, 100, 'm')],
+      why: `Mianownik skali dzielimy przez 100, żeby zamienić centymetry na metry: <b>${correct} m</b>.`
+    };
+  }
+});
+
+/* --- 5. Obliczanie odległości --- */
+M.push({
+  id: 'odleglosc', ikona: '📐', title: 'Obliczanie odległości',
+  desc: 'Z mapy w teren i z terenu na mapę — zadania z liczbami.',
+  theory: `<b>Z mapy w teren</b> (mnożymy):<br>
+    <code>odległość rzeczywista = odległość na mapie × mianownik skali</code><br>
+    Przykład: 4 cm na mapie 1 : 50 000 → 4 × 50 000 = 200 000 cm = 2000 m = <b>2 km</b>.
+    <ul>
+      <li>100 cm = 1 m,</li>
+      <li>100 000 cm = 1 km.</li>
+    </ul>
+    <b>Z terenu na mapę</b> (dzielimy):<br>
+    <code>odległość na mapie = odległość rzeczywista w cm : mianownik skali</code>`,
+  /* Sytuacja w zadaniu zawsze pasuje do skali mapy:
+     - duże skale (plan, mapa okolicy) → obiekty w jednej wsi, setki metrów – kilka km,
+     - średnie (mapa powiatu, województwa) → sąsiednie miejscowości, kilka – kilkadziesiąt km,
+     - małe (mapa Polski) → prawdziwe miasta i przybliżone odległości w linii prostej. */
+  gen() {
+    const tier = pick(['okolica', 'okolica', 'region', 'polska']);
+    const toMap = Math.random() < .4;          // true: z terenu na mapę, false: z mapy w teren
+    let d, place, mapName, cm, realCm;
+
+    if (tier === 'polska') {
+      d = pick([1000000, 2000000]);
+      const [a, b, km] = pick([
+        ['Warszawą', 'Łodzią', 120], ['Warszawą', 'Krakowem', 250], ['Warszawą', 'Gdańskiem', 280],
+        ['Warszawą', 'Lublinem', 150], ['Warszawą', 'Białymstokiem', 180], ['Krakowem', 'Katowicami', 70],
+        ['Krakowem', 'Łodzią', 190], ['Poznaniem', 'Szczecinem', 200], ['Wrocławiem', 'Opolem', 80],
+        ['Gdańskiem', 'Bydgoszczą', 140]
+      ]);
+      place = `${a} a ${b}`;
+      mapName = 'mapie Polski';
+      realCm = km * 100000;
+      cm = realCm / d;
+    } else {
+      d = tier === 'okolica' ? pick([10000, 25000, 50000]) : pick([100000, 200000, 500000]);
+      place = tier === 'okolica'
+        ? pick(['leśniczówką a młynem', 'szkołą a stacją kolejową', 'kościołem a Jeziorem Krogulec', 'szczytem Sowiej Góry a leśniczówką'])
+        : pick(['Lipową a miastem Ostrów', 'Lipową a Jeziorem Wielkim', 'Ostrowem a Kamieńskiem', 'Lipową a zamkiem w Borowie']);
+      mapName = tier === 'okolica' ? 'mapie okolic Lipowej' : 'mapie województwa';
+      cm = pick([2, 2.5, 3, 4, 5, 6, 8]);
+      realCm = cm * d;
+    }
+
+    const useKm = realCm >= 100000;
+    const real = useKm ? realCm / 100000 : realCm / 100;
+    const unit = useKm ? 'km' : 'm';
+    const realTxt = `${num(real)} ${unit}`;
+    const convStep = stepZ(realCm, useKm ? 100000 : 100, unit);
+    const approx = tier === 'polska' ? ' w linii prostej około' : '';
+
+    if (!toMap) {
+      return {
+        kind: 'number',
+        q: `Na ${mapName} w skali <b>${skalaTxt(d)}</b> odległość między ${place} wynosi <b>${num(cm)} cm</b>. Ile wynosi w terenie?`,
+        sub: `Podaj wynik w ${useKm ? 'kilometrach' : 'metrach'}.`,
+        unit, value: real,
+        steps: [`${num(cm)} cm × ${num(d)} = ${num(realCm)} cm`, convStep],
+        why: `Mnożymy odległość z mapy przez mianownik skali, a potem zamieniamy centymetry na ${useKm ? 'kilometry' : 'metry'}. Wynik: <b>${realTxt}</b>.`
+      };
+    }
+    return {
+      kind: 'number',
+      q: `Odległość między ${place} wynosi${approx} <b>${realTxt}</b>. Ile centymetrów będzie miał ten odcinek na ${mapName} w skali <b>${skalaTxt(d)}</b>?`,
+      unit: 'cm', value: cm,
+      steps: [
+        `${realTxt} = ${num(realCm)} cm`,
+        `${num(realCm)} cm : ${num(d)} = ${num(cm)} cm`
+      ],
+      why: `Zamieniamy ${useKm ? 'kilometry' : 'metry'} na centymetry i dzielimy przez mianownik skali. Wynik: <b>${num(cm)} cm</b>.`
+    };
+  }
+});
+
+/* --- 6. Podziałka liniowa --- */
+M.push({
+  id: 'podzialka', ikona: '📊', title: 'Podziałka liniowa',
+  desc: 'Zmierz odcinek A–B podziałką i odczytaj, ile to kilometrów.',
+  theory: `<b>Podziałka liniowa</b> to odcinek podzielony na równe części z podpisanymi odległościami w terenie.
+    Żeby zmierzyć odległość, przykładamy do podziałki zmierzony odcinek i odczytujemy wynik — <b>bez żadnych obliczeń</b>.
+    <br><br>Podziałka ma wielką zaletę: gdy mapę powiększymy albo pomniejszymy (np. na kserokopiarce), <b>podziałka zmienia się razem z mapą</b> i nadal jest prawidłowa, a skala liczbowa przestaje się zgadzać.`,
+  gen() {
+    const kmPerSeg = pick([1, 1, 2, 2, 4, 10]);   // wartości, których połowy są „ładne” dla piątoklasisty
+    const segs = 4;
+    const lenSegs = pick([1, 1.5, 2, 2.5, 3, 3.5]);
+    const val = +(kmPerSeg * lenSegs).toFixed(3);
+    if (Math.random() < .75) {
+      return {
+        kind: 'number',
+        q: 'Jaka jest w terenie odległość między punktami <b>A</b> i <b>B</b>?',
+        sub: 'Przerywane linie pokazują, gdzie A i B wypadają na podziałce. Krótka kreska to pół działki.',
+        fig: podzialkaSvg(kmPerSeg, segs, lenSegs),
+        unit: 'km', value: val,
+        steps: [`odcinek A–B = ${num(lenSegs)} × działka podziałki`, `${num(lenSegs)} × ${num(kmPerSeg)} km = ${num(val)} km`],
+        why: `Jedna działka podziałki to ${num(kmPerSeg)} km, a odcinek A–B zajmuje ${num(lenSegs)} działki. Razem <b>${num(val)} km</b>.`
+      };
+    }
+    const correct = `${num(kmPerSeg)} km`;
+    return {
+      kind: 'choice',
+      q: 'Ile kilometrów w terenie odpowiada <b>jednej działce</b> tej podziałki?',
+      fig: podzialkaSvg(kmPerSeg, segs, lenSegs),
+      options: mcq(correct, distract(correct, [0.5, 1, 2, 4, 5, 10, 20].map(x => `${num(x)} km`))),
+      correct,
+      why: `Kolejne kreski podziałki podpisane są co ${num(kmPerSeg)} km — tyle wynosi jedna działka.`
+    };
+  }
+});
+
+/* --- 7. Która skala jest większa --- */
+M.push({
+  id: 'porownanie', ikona: '🔍', title: 'Większa czy mniejsza skala',
+  desc: 'Która mapa pokazuje więcej szczegółów, a która większy obszar.',
+  theory: `Im <b>mniejszy mianownik</b>, tym <b>większa skala</b>.
+    <ul>
+      <li><b>Duża skala</b> (np. 1 : 10 000) — mały obszar, ale <b>bardzo dużo szczegółów</b>. Taki jest plan miasta.</li>
+      <li><b>Mała skala</b> (np. 1 : 5 000 000) — duży obszar (cała Polska, kontynent), ale <b>mało szczegółów</b>.</li>
+    </ul>
+    Zapamiętaj: <code>1 : 10 000</code> to jak ułamek — im większa liczba pod kreską, tym mniejsza całość.`,
+  gen() {
+    const two = shuffle(SKALE).slice(0, 2).sort((a, b) => a.d - b.d);
+    const [big, small] = two;
+    const t = Math.random();
+    if (t < .35) {
+      const correct = skalaTxt(big.d);
+      return {
+        kind: 'choice',
+        q: `Która z tych skal jest <b>większa</b>?`,
+        options: shuffle([skalaTxt(big.d), skalaTxt(small.d)]),
+        correct,
+        why: `Większa skala to ta z <b>mniejszym mianownikiem</b> — ${skalaTxt(big.d)}. Taka mapa jest dokładniejsza.`
+      };
+    }
+    if (t < .7) {
+      const correct = skalaTxt(big.d);
+      return {
+        kind: 'choice',
+        q: `Na której mapie zobaczysz <b>więcej szczegółów</b>?`,
+        options: shuffle([skalaTxt(big.d), skalaTxt(small.d)]),
+        correct,
+        why: `Mapa w skali ${skalaTxt(big.d)} jest mniej pomniejszona, więc pokazuje <b>więcej szczegółów</b> (ale mniejszy obszar).`
+      };
+    }
+    const correct = skalaTxt(small.d);
+    return {
+      kind: 'choice',
+      q: `Na której mapie zmieści się <b>większy obszar</b>?`,
+      options: shuffle([skalaTxt(big.d), skalaTxt(small.d)]),
+      correct,
+      why: `Im większy mianownik, tym mocniej teren jest pomniejszony — na mapie ${skalaTxt(small.d)} zmieści się <b>większy obszar</b>.`
+    };
+  }
+});
+
+/* --- 8. Rodzaje map --- */
+const MAPY = [
+  { n: 'plan miasta', u: ['trafić z dworca na ulicę Kwiatową w obcym mieście', 'znaleźć najkrótszą drogę pieszo między dwiema ulicami'] },
+  { n: 'mapa turystyczna', u: ['zaplanować wycieczkę szlakiem w góry i znaleźć schronisko', 'sprawdzić, którędy biegnie zielony szlak wokół jeziora'] },
+  { n: 'mapa samochodowa', u: ['zaplanować trasę samochodem z Warszawy do Gdańska', 'sprawdzić, która droga krajowa łączy dwa miasta'] },
+  { n: 'mapa polityczna', u: ['sprawdzić, z jakimi państwami graniczy Polska', 'odszukać stolice państw Europy'] },
+  { n: 'mapa hipsometryczna', u: ['sprawdzić, jak zmienia się wysokość terenu w Polsce', 'odczytać, gdzie leżą niziny, a gdzie góry'] },
+  { n: 'mapa klimatyczna', u: ['sprawdzić, gdzie w Polsce spada najwięcej deszczu', 'porównać temperatury w lipcu w różnych regionach'] },
+  { n: 'mapa gospodarcza', u: ['dowiedzieć się, gdzie wydobywa się węgiel kamienny', 'sprawdzić, w których regionach uprawia się ziemniaki'] }
+];
+M.push({
+  id: 'rodzaje', ikona: '📚', title: 'Rodzaje map',
+  desc: 'Jakiej mapy użyjesz na wycieczkę, a jakiej do pracy domowej?',
+  theory: `Mapy dzielimy według <b>treści</b>:
+    <ul>
+      <li><b>ogólnogeograficzne</b> — pokazują wszystko naraz: ukształtowanie terenu, rzeki, miasta (np. mapa hipsometryczna Polski);</li>
+      <li><b>tematyczne</b> — pokazują jeden wybrany temat: klimat, gospodarkę, podział polityczny, szlaki turystyczne.</li>
+    </ul>
+    Mapy dzielimy też według <b>skali</b>: wielkoskalowe (plan miasta, mapa turystyczna) i małoskalowe (mapa świata, mapa Europy).`,
+  gen() {
+    const m = pick(MAPY);
+    if (Math.random() < .75) {
+      return {
+        kind: 'choice',
+        q: `Której mapy najlepiej użyć, żeby <b>${pick(m.u)}</b>?`,
+        options: mcq(m.n, distract(m.n, MAPY.map(x => x.n))),
+        correct: m.n,
+        why: `Najlepsza będzie <b>${m.n}</b> — jest przygotowana właśnie do takich zadań.`
+      };
+    }
+    const tema = ['mapa klimatyczna', 'mapa gospodarcza', 'mapa polityczna', 'mapa turystyczna', 'mapa samochodowa'];
+    const isTema = Math.random() < .6;
+    const nazwa = isTema ? pick(tema) : pick(['mapa hipsometryczna', 'mapa ogólnogeograficzna Polski', 'mapa poziomicowa']);
+    const correct = isTema ? 'mapa tematyczna' : 'mapa ogólnogeograficzna';
+    return {
+      kind: 'choice',
+      q: `<b>${nazwa.charAt(0).toUpperCase() + nazwa.slice(1)}</b> to według treści:`,
+      options: shuffle(['mapa tematyczna', 'mapa ogólnogeograficzna']),
+      correct,
+      why: isTema
+        ? `To <b>mapa tematyczna</b> — pokazuje jeden wybrany temat, a nie wszystko naraz.`
+        : `To <b>mapa ogólnogeograficzna</b> — przedstawia ogólny obraz terenu: ukształtowanie, wody, miejscowości.`
+    };
+  }
+});
+
+/* --- 9. Poziomice i wysokość --- */
+M.push({
+  id: 'poziomice', ikona: '🏔️', title: 'Poziomice i wysokość',
+  desc: 'Wysokość bezwzględna i względna, cięcie poziomicowe, stromy stok.',
+  theory: `<b>Poziomice</b> to linie łączące punkty o tej samej wysokości nad poziomem morza.
+    <ul>
+      <li><b>Wysokość bezwzględna</b> — mierzona od poziomu morza, zapisujemy ją jako <code>m n.p.m.</code></li>
+      <li><b>Wysokość względna</b> — różnica wysokości między dwoma punktami; po prostu <b>odejmujemy</b>.</li>
+      <li><b>Cięcie poziomicowe</b> — różnica wysokości między sąsiednimi poziomicami (np. co 10 m).</li>
+    </ul>
+    <b>Gęste poziomice = stromy stok</b>, poziomice daleko od siebie = stok łagodny.`,
+  gen() {
+    const ci = pick([5, 10, 20, 25]);
+    const base = pick([100, 120, 140, 150, 200, 250]);
+    const lv = [base, base + ci, base + 2 * ci, base + 3 * ci];
+    /* punkty leżące dokładnie na poziomicach (lewa krawędź elipsy) */
+    const onRing = [
+      { n: 'A', x: 70, y: 150, lv: lv[0], i: 0 },
+      { n: 'B', x: 128, y: 150, lv: lv[1], i: 1 },
+      { n: 'C', x: 186, y: 150, lv: lv[2], i: 2 },
+      { n: 'D', x: 244, y: 150, lv: lv[3], i: 3 }
+    ];
+    const t = Math.random();
+    if (t < .35) {
+      const p = pick(onRing);
+      return {
+        kind: 'number',
+        q: `Ile wynosi <b>wysokość bezwzględna</b> punktu <b>${p.n}</b>?`,
+        sub: 'Prowadź palcem wzdłuż poziomicy, na której leży punkt, aż dojdziesz do jej opisu.',
+        fig: poziomiceSvg(base, ci, onRing), hill: { base, ci },
+        unit: 'm n.p.m.', value: p.lv,
+        why: `Punkt <b>${p.n}</b> leży na poziomicy <b>${p.lv}</b>, więc jego wysokość bezwzględna to ${p.lv} m n.p.m.`
+      };
+    }
+    if (t < .7) {
+      const two = shuffle(onRing).slice(0, 2).sort((a, b) => b.lv - a.lv);
+      const d = two[0].lv - two[1].lv;
+      return {
+        kind: 'number',
+        q: `Ile wynosi <b>wysokość względna</b> między punktami <b>${two[1].n}</b> i <b>${two[0].n}</b>?`,
+        sub: 'Wysokość względna to różnica wysokości.',
+        fig: poziomiceSvg(base, ci, onRing), hill: { base, ci },
+        unit: 'm', value: d,
+        steps: [`${two[0].n}: ${two[0].lv} m n.p.m.`, `${two[1].n}: ${two[1].lv} m n.p.m.`, `${two[0].lv} − ${two[1].lv} = ${d} m`],
+        why: `Od wyższej wysokości odejmujemy niższą: ${two[0].lv} − ${two[1].lv} = <b>${d} m</b>.`
+      };
+    }
+    if (t < .85) {
+      return {
+        kind: 'choice',
+        q: 'Który stok wzgórza jest <b>bardziej stromy</b>?',
+        sub: 'Popatrz, gdzie poziomice leżą bliżej siebie.',
+        fig: poziomiceSvg(base, ci, []), hill: { base, ci },
+        options: shuffle(['wschodni — po prawej stronie', 'zachodni — po lewej stronie']),
+        correct: 'wschodni — po prawej stronie',
+        why: `Po prawej stronie poziomice leżą <b>gęściej</b>, a gęste poziomice oznaczają <b>stromy stok</b>.`
+      };
+    }
+    return {
+      kind: 'number',
+      q: `Ile wynosi <b>cięcie poziomicowe</b> na tej mapie?`,
+      sub: 'To różnica wysokości między sąsiednimi poziomicami.',
+      fig: poziomiceSvg(base, ci, []), hill: { base, ci },
+      unit: 'm', value: ci,
+      steps: [`sąsiednie poziomice: ${lv[1]} i ${lv[0]}`, `${lv[1]} − ${lv[0]} = ${ci} m`],
+      why: `Sąsiednie poziomice różnią się o <b>${ci} m</b> — to właśnie cięcie poziomicowe.`
+    };
+  }
+});
+
+/* --- 10. Barwy hipsometryczne --- */
+M.push({
+  id: 'hipso', ikona: '🎨', title: 'Barwy hipsometryczne',
+  desc: 'Zielony, żółty, brązowy — czyli jak kolor pokazuje wysokość.',
+  theory: `Na <b>mapie hipsometrycznej</b> wysokość terenu pokazują kolory. Każdy kolor oznacza jeden przedział wysokości — sprawdzamy go w legendzie.
+    <ul>
+      <li><b>ciemnozielony</b> — depresja, czyli teren <b>poniżej poziomu morza</b> (w Polsce: Żuławy Wiślane, ok. 1,8 m poniżej poziomu morza),</li>
+      <li><b>zielony i jasnozielony</b> — 0–300 m n.p.m., czyli <b>niziny</b>,</li>
+      <li><b>żółty</b> — 300–500 m n.p.m., w Polsce to głównie <b>wyżyny</b>,</li>
+      <li><b>odcienie brązu</b> — ponad 500 m n.p.m., czyli <b>góry</b>; im ciemniejszy brąz, tym wyżej.</li>
+    </ul>
+    <b>Niebieski</b> zawsze oznacza wodę — a im ciemniejszy, tym głębiej.`,
+  gen() {
+    const h = pick(HIPSO);
+    if (Math.random() < .5) {
+      const depresja = h.r[1] <= 0;
+      const wys = depresja ? pick([0.5, 1, 1.5, 1.8]) : ri(h.r[0] + 10, h.r[1] - 10);
+      const wysTxt = depresja ? `${num(wys)} m poniżej poziomu morza` : `${num(wys)} m n.p.m.`;
+      return {
+        kind: 'choice',
+        q: `Jakim kolorem zaznaczony będzie na mapie hipsometrycznej obszar położony <b>${wysTxt}</b>?`,
+        fig: hipsoSvg(),
+        options: mcq(h.t, distract(h.t, HIPSO.map(x => x.t))),
+        correct: h.t,
+        why: depresja
+          ? `Teren poniżej poziomu morza to <b>depresja</b> — zaznacza się ją kolorem <b>${h.t}</b>.`
+          : `${num(wys)} m n.p.m. mieści się w przedziale ${h.txt}, czyli kolor <b>${h.t}</b>.`
+      };
+    }
+    const correct = h.txt;
+    return {
+      kind: 'choice',
+      q: `Jaką wysokość oznacza na mapie hipsometrycznej kolor <b>${h.t}</b>?`,
+      fig: hipsoSvg(),
+      options: mcq(correct, distract(correct, HIPSO.map(x => x.txt))),
+      correct,
+      why: `Kolor <b>${h.t}</b> oznacza: ${h.txt}. W Polsce: ${h.kraina}.`
+    };
+  }
+});
+
+/* ============================================================
+   EFEKTY WIZUALNE
+   ============================================================ */
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Krok zamiany jednostek z animacją „skreśl zera”.
+   Gdy zer nie da się skreślić (np. 225 000 cm : 100 000), zwraca zwykły tekst. */
+function stepZ(n, div, unit) {
+  const k = String(div).length - 1;
+  const res = n / div;
+  if (n % div !== 0) return `${num(n)} cm : ${num(div)} = ${num(res)} ${unit}`;
+  const s = num(n);
+  let left = k, out = '';
+  for (let i = s.length - 1; i >= 0; i--) {
+    if (left > 0 && s[i] === '0') { out = `<span class="z" style="--j:${k - left}">0</span>` + out; left--; }
+    else out = esc(s[i]) + out;
+  }
+  const ile = k === 2 ? 'dwa zera' : k === 5 ? 'pięć zer' : `${k} zer`;
+  return { html: `${out} cm : ${num(div)} = <b>${num(res)} ${unit}</b><em class="zhint">skreślamy ${ile}</em>` };
+}
+
+/* Przekrój wzgórza z zachodu na wschód — te same współrzędne x co na mapie poziomicowej,
+   więc przekrój leży dokładnie pod poziomicami, z których powstał. */
+function profilSvg(base, ci) {
+  const top = base + 3 * ci + Math.round(ci * .8);
+  const lo = base - ci, hi = top + ci * .4;
+  const Y = h => +(128 - (h - lo) / (hi - lo) * 106).toFixed(1);
+  const pts = [[30, base - ci * .6], [70, base], [128, base + ci], [186, base + 2 * ci], [244, base + 3 * ci],
+    [298, top], [352, base + 3 * ci], [378, base + 2 * ci], [404, base + ci], [430, base], [470, base - ci * .6]];
+  const line = 'M' + pts.map(([x, h]) => `${x} ${Y(h)}`).join(' L');
+  const levels = [0, 1, 2, 3].map(i => base + i * ci);
+  return `<svg viewBox="0 0 500 150" class="profil" role="img" aria-label="Przekrój wzgórza z zachodu na wschód">
+    <rect width="500" height="150" fill="#FBFAF4"/>
+    <path class="area" d="${line} L470 138 L30 138Z" fill="#E7D6B8"/>
+    ${levels.map(h => `<path d="M30 ${Y(h)}H470" stroke="#C9B89A" stroke-width=".8" stroke-dasharray="3 4"/>
+      <text x="26" y="${Y(h) + 4}" font-family="monospace" font-size="10" fill="#8A5A22" text-anchor="end">${h}</text>`).join('')}
+    ${pts.slice(1, -1).filter(p => p[0] !== 298).map(([x, h]) => `<path d="M${x} 0V${Y(h)}" stroke="#B07A3C" stroke-width=".8" stroke-dasharray="2 3" opacity=".7"/>`).join('')}
+    <path class="line" d="${line}" fill="none" stroke="#8A5A22" stroke-width="2.6" stroke-linejoin="round"/>
+    <text x="96" y="${Y(base + 2.2 * ci)}" font-family="sans-serif" font-size="11" fill="#5A4326">łagodny stok</text>
+    <text x="394" y="${Y(base + 2.9 * ci)}" font-family="sans-serif" font-size="11" font-weight="bold" fill="#8A3A1A">stromy stok</text>
+    <text x="34" y="148" font-family="monospace" font-size="11" font-weight="bold" fill="#33413B">W</text>
+    <text x="466" y="148" font-family="monospace" font-size="11" font-weight="bold" fill="#33413B" text-anchor="end">E</text>
+  </svg>`;
+}
+
+/* Pieczątka ze szlaku — tusz lekko rozmyty filtrem, żeby wyglądała na odbitą */
+function stampSvg(label, date) {
+  return `<svg class="stamp" viewBox="-70 -70 140 140" width="150" height="150" role="img" aria-label="Pieczątka: ${esc(label)}">
+    <defs>
+      <filter id="ink"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+      <path id="stampArc" d="M-46 0A46 46 0 1 1 46 0"/>
+    </defs>
+    <g transform="rotate(-9)" filter="url(#ink)" opacity=".92">
+      <circle r="62" fill="none" stroke="#B33A2B" stroke-width="4"/>
+      <circle r="54" fill="none" stroke="#B33A2B" stroke-width="1.5"/>
+      <text font-family="monospace" font-size="10" font-weight="600" fill="#B33A2B" letter-spacing="1.5"><textPath href="#stampArc" startOffset="50%" text-anchor="middle">SZLAK KARTOGRAFA</textPath></text>
+      <text y="9" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#B33A2B" text-anchor="middle">${esc(label)}</text>
+      <text y="31" font-family="monospace" font-size="10" fill="#B33A2B" text-anchor="middle">${esc(date)}</text>
+    </g>
+  </svg>`;
+}
+
+/* Konfetti z symboli map: drzewka, szczyty, fale, punkty */
+function confetti() {
+  if (REDUCED) return;
+  const c = document.createElement('canvas');
+  c.className = 'confetti';
+  document.body.appendChild(c);
+  const W = innerWidth, H = innerHeight, dpr = devicePixelRatio || 1;
+  c.width = W * dpr; c.height = H * dpr;
+  const x = c.getContext('2d');
+  x.scale(dpr, dpr);
+  const kinds = ['tree', 'peak', 'wave', 'dot', 'tree', 'flag'];
+  const P = Array.from({ length: 80 }, () => ({
+    x: Math.random() * W, y: -20 - Math.random() * H * .6,
+    vx: (Math.random() - .5) * 1.8, vy: 2.2 + Math.random() * 3,
+    r: Math.random() * 6.28, vr: (Math.random() - .5) * .18,
+    k: pick(kinds), s: 7 + Math.random() * 6
+  }));
+  const t0 = performance.now();
+  (function frame(t) {
+    x.clearRect(0, 0, W, H);
+    for (const p of P) {
+      p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      x.save(); x.translate(p.x, p.y); x.rotate(p.r);
+      const s = p.s;
+      if (p.k === 'tree') { x.fillStyle = '#2E7D3A'; x.beginPath(); x.moveTo(0, -s); x.lineTo(s * .8, s * .6); x.lineTo(-s * .8, s * .6); x.fill(); }
+      else if (p.k === 'peak') { x.fillStyle = '#8A5A22'; x.beginPath(); x.moveTo(0, -s * .8); x.lineTo(s * .7, s * .5); x.lineTo(-s * .7, s * .5); x.fill(); }
+      else if (p.k === 'wave') { x.strokeStyle = '#2C6FA6'; x.lineWidth = 2.4; x.beginPath(); x.moveTo(-s, 0); x.quadraticCurveTo(-s / 2, -s / 2, 0, 0); x.quadraticCurveTo(s / 2, s / 2, s, 0); x.stroke(); }
+      else if (p.k === 'flag') { x.fillStyle = '#F2B233'; x.fillRect(0, -s * .5, s * .9, s * .6); x.fillStyle = '#1B2A24'; x.fillRect(-1, -s * .5, 2, s * 1.2); }
+      else { x.fillStyle = '#B33A2B'; x.beginPath(); x.arc(0, 0, s * .4, 0, 6.29); x.fill(); }
+      x.restore();
+    }
+    if (t - t0 < 3400) requestAnimationFrame(frame); else c.remove();
+  })(t0);
+}
+
+/* ============================================================
+   STAN I ZAPIS
+   ============================================================ */
+const STORE = 'czytam-mape-v1';
+let save = { pts: 0, best: {}, mastery: {}, stamps: {}, mistakes: [], bestStreak: 0, treasures: {}, sound: true, duel: { p1: '', p2: '', topic: 'all', rounds: 5 } };
+try { const raw = localStorage.getItem(STORE); if (raw) save = Object.assign(save, JSON.parse(raw)); } catch (e) { }
+function persist() { try { localStorage.setItem(STORE, JSON.stringify(save)); } catch (e) { } }
+
+/* ============================================================
+   DŹWIĘKI — syntezowane w przeglądarce (Web Audio), bez plików.
+   Krótkie (< 0,5 s) i ciche, żeby nie męczyły przy wielu pytaniach z rzędu.
+   ============================================================ */
+const Sound = {
+  ctx: null, master: null,
+  init() {
+    if (!this.ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      this.ctx = new AC();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = .55;
+      this.master.connect(this.ctx.destination);
+    }
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    return this.ctx;
+  },
+  tone(f, t, dur, type = 'triangle', vol = .14, f2 = null) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f, t);
+    if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + .012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(this.master);
+    o.start(t); o.stop(t + dur + .02);
+  },
+  noise(t, dur, vol, cutoff) {
+    const c = this.ctx, len = Math.floor(c.sampleRate * dur);
+    const buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = buf; f.type = 'lowpass'; f.frequency.value = cutoff; g.gain.value = vol;
+    s.connect(f); f.connect(g); g.connect(this.master);
+    s.start(t);
+  },
+  play(name, arg = 0) {
+    if (!save.sound) return;
+    const c = this.init();
+    if (!c) return;
+    const t = c.currentTime + .01;
+    if (name === 'ok') {                     // dzwoneczek; przy serii coraz wyżej (o pół tonu)
+      const f = 660 * Math.pow(2, Math.min(arg, 12) / 12);
+      this.tone(f, t, .12); this.tone(f * 1.5, t + .08, .22);
+    } else if (name === 'bad') {             // cichy, opadający ton — bez „brzęczyka”
+      this.tone(247, t, .32, 'sine', .1, 185);
+    } else if (name === 'steps') {           // kroki odkrywcy
+      for (let i = 0; i < 4; i++) this.noise(t + i * .27, .06, .35, 700);
+    } else if (name === 'stamp') {           // głuche „tup” pieczątki
+      this.tone(130, t, .18, 'sine', .3, 55); this.noise(t, .08, .6, 420);
+    } else if (name === 'fanfare') {         // skarb, awans, szóstka, wygrana
+      [523, 659, 784].forEach((f, i) => this.tone(f, t + i * .09, .14));
+      this.tone(1047, t + .27, .45); this.tone(784, t + .27, .45, 'sine', .07);
+    } else if (name === 'turn') {            // zmiana gracza w pojedynku
+      this.tone(880, t, .14, 'sine', .1); this.tone(660, t + .13, .22, 'sine', .1);
+    }
+  }
+};
+
+let streak = 0;   // bieżąca seria dobrych odpowiedzi (nie zapisuje się — to seria „na teraz”)
+function renderPts() { $('#pts').textContent = num(save.pts) + ' pkt'; }
+function renderStreak(bump) {
+  const el = $('#streak');
+  el.hidden = streak < 2;
+  $('#streakN').textContent = streak;
+  el.classList.toggle('hot', streak >= 5);
+  if (bump && !REDUCED) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+}
+
+/* zeszyt błędów */
+const mistakeKey = (modId, q) => `${modId}|${q.q}|${q.kind === 'number' ? q.value : q.correct}`;
+function addMistake(modId, q) {
+  const key = mistakeKey(modId, q);
+  if (save.mistakes.some(m => m.key === key)) return;
+  save.mistakes.push({ key, modId, q });
+  if (save.mistakes.length > 30) save.mistakes.shift();
+}
+function removeMistake(key) { save.mistakes = save.mistakes.filter(m => m.key !== key); }
+
+/* stopnie kartografa — zdobywa się je pieczątkami, czyli opanowaniem tematów */
+const RANKS = [[0, 'Turysta'], [2, 'Tropiciel'], [5, 'Przewodnik'], [8, 'Kartograf'], [10, 'Mistrz kartografii']];
+const stampCount = () => Object.keys(save.stamps).length;
+const rankOf = n => RANKS.filter(r => n >= r[0]).pop()[1];
+const nextRank = n => RANKS.find(r => r[0] > n);
+
+const SHORT = {
+  elementy: 'Elementy mapy', kierunki: 'Kierunki', znaki: 'Znaki umowne', skala: 'Skala', odleglosc: 'Odległości',
+  podzialka: 'Podziałka', porownanie: 'Skale', rodzaje: 'Rodzaje map', poziomice: 'Poziomice', hipso: 'Barwy'
+};
+
+/* ocena orientacyjna 1–6 */
+function grade(ok, total) {
+  const p = ok / total * 100;
+  if (p === 100) return [6, 'celujący'];
+  if (p >= 85) return [5, 'bardzo dobry'];
+  if (p >= 70) return [4, 'dobry'];
+  if (p >= 50) return [3, 'dostateczny'];
+  if (p >= 30) return [2, 'dopuszczający'];
+  return [1, 'niedostateczny'];
+}
+
+/* ============================================================
+   POSZUKIWANIE SKARBU
+   Mapa „Okolice Lipowej”, 1 : 50 000, czyli 1 cm = 500 m.
+   Kierunki w misjach sprawdzone z geometrią mapy (każdy ≤ 10° od „czystego” kierunku).
+   ============================================================ */
+const MISSION_THEORY = `<b>Ściąga odkrywcy</b>
+  <ul>
+    <li>Skala <code>1 : 50 000</code> to <code>1 cm – 500 m</code>, czyli 2 cm na mapie = 1 km w terenie.</li>
+    <li>Góra mapy to <b>północ</b>, prawa strona — <b>wschód</b>.</li>
+    <li>Co oznacza znak — sprawdzasz w <b>legendzie</b>.</li>
+    <li>Wysokość względna = różnica dwóch wysokości.</li>
+  </ul>`;
+const mapNote = 'Mapa „Okolice Lipowej”, skala 1 : 50 000.';
+const MISSIONS = [
+  {
+    id: 'sowia', title: 'Skarb młynarza',
+    teaser: 'Leśniczówka → Sowia Góra → ? Kierunki, skala i wysokość.',
+    intro: 'Stary leśniczy opowiada, że dawny młynarz ukrył skarb gdzieś w okolicach Lipowej. Wyruszasz spod leśniczówki z mapą w ręku.',
+    start: 'lesniczy',
+    steps: [
+      { kind: 'choice', q: 'Stoisz przy <b>leśniczówce</b>. W którym kierunku musisz iść, żeby dojść na szczyt <b>Sowiej Góry</b>?',
+        options: ['północ', 'wschód', 'południe', 'północny wschód'], correct: 'północ', move: 'szczyt',
+        why: 'Sowia Góra leży prosto w górę mapy od leśniczówki, a góra mapy to <b>północ</b>.' },
+      { kind: 'number', q: 'Na mapie droga od leśniczówki na szczyt ma <b>8 cm</b>. Ile kilometrów masz już za sobą?',
+        unit: 'km', value: 4, steps: ['8 cm × 50 000 = 400 000 cm', stepZ(400000, 100000, 'km')],
+        why: 'Mnożymy przez mianownik skali i zamieniamy centymetry na kilometry: <b>4 km</b>.' },
+      { kind: 'number', q: 'Tabliczka na szczycie: <b>218 m n.p.m.</b> Stacja kolejowa w dolinie leży na wysokości <b>168 m n.p.m.</b> O ile metrów szczyt jest wyżej od stacji?',
+        unit: 'm', value: 50, steps: ['218 − 168 = 50 m'],
+        why: 'To <b>wysokość względna</b> — różnica wysokości dwóch miejsc.' },
+      { kind: 'choice', q: 'Na szczycie znajdujesz kartkę: „Idź na <b>wschód</b>, aż dojdziesz nad rzekę. Skarb jest w budynku zaznaczonym <b>brązowym kwadratem</b>”. Co to za miejsce?',
+        options: ['młyn nad Bystrzycą', 'stacja kolejowa', 'kościół w Lipowej', 'leśniczówka'], correct: 'młyn nad Bystrzycą', move: 'mlyn',
+        why: 'Na wschód od szczytu, nad Bystrzycą, stoi <b>młyn</b> — brązowy kwadrat nad rzeką.' }
+    ]
+  },
+  {
+    id: 'dzwon', title: 'Zatopiony dzwon',
+    teaser: 'Stacja → kościół → Sowia Góra → ? Skala mianowana i znaki umowne.',
+    intro: 'Dawno temu z wieży kościoła w Lipowej zniknął dzwon. Podobno zatopiono go, żeby nie wpadł w ręce najeźdźców. Zaczynasz na stacji kolejowej.',
+    start: 'stacja',
+    steps: [
+      { kind: 'choice', q: 'Idziesz ze stacji na <b>północny zachód</b>, do najbliższego budynku z krzyżem. Dokąd dotrzesz?',
+        options: ['kościół w Lipowej', 'młyn nad Bystrzycą', 'leśniczówka', 'Sowia Góra'], correct: 'kościół w Lipowej', move: 'kosciol',
+        why: 'Na północny zachód od stacji stoi <b>kościół w Lipowej</b> — na mapie ma krzyżyk na dachu.' },
+      { kind: 'choice', q: 'Ksiądz pokazuje ci starą mapę w skali <b>1 : 50 000</b>. Jak zapisać tę skalę jako skalę mianowaną?',
+        options: ['1 cm – 500 m', '1 cm – 50 m', '1 cm – 5 km', '1 cm – 5 m'], correct: '1 cm – 500 m',
+        steps: [stepZ(50000, 100, 'm')],
+        why: '50 000 cm to <b>500 m</b>, więc 1 cm na mapie = 500 m w terenie.' },
+      { kind: 'number', q: 'Z kościoła idziesz na północny zachód, na szczyt Sowiej Góry. Na mapie ten odcinek ma <b>7 cm</b>. Ile to kilometrów?',
+        unit: 'km', value: 3.5, move: 'szczyt', steps: ['7 cm × 50 000 = 350 000 cm', stepZ(350000, 100000, 'km')],
+        why: '7 × 500 m = 3500 m, czyli <b>3,5 km</b>.' },
+      { kind: 'choice', q: 'Ze szczytu widać całą okolicę. Legenda mówi: „Dzwon spoczywa w miejscu, które ma <b>niebieski znak powierzchniowy</b>”. Gdzie szukasz?',
+        options: ['Jezioro Krogulec', 'rzeka Bystrzyca', 'las pod Sową Górą', 'łąka koło Lipowej'], correct: 'Jezioro Krogulec', move: 'jezioro',
+        why: 'Niebieski oznacza wodę, a znak powierzchniowy zajmuje obszar. Rzeka ma znak <b>liniowy</b>, więc zostaje <b>jezioro</b>.' }
+    ]
+  },
+  {
+    id: 'mlyn', title: 'Tajemnica torów',
+    teaser: 'Szkoła → stacja → ? Legenda, odległość i kierunki.',
+    intro: 'Po lekcjach znajdujesz w ławce list: „Kto rozwiąże zagadkę torów, znajdzie nagrodę”. Wychodzisz ze szkoły.',
+    start: 'szkola',
+    steps: [
+      { kind: 'choice', q: 'W liście jest rysunek: czarna linia z krótkimi poprzecznymi kreskami. Gdzie na mapie sprawdzisz, co oznacza?',
+        options: ['w legendzie', 'w skali', 'na róży wiatrów', 'w tytule mapy'], correct: 'w legendzie',
+        why: 'Znaczenie znaków umownych objaśnia <b>legenda</b>. Ten znak to linia kolejowa.' },
+      { kind: 'number', q: 'To linia kolejowa! Idziesz ze szkoły na stację. Na mapie ta droga ma <b>7 cm</b>. Ile to <b>metrów</b>?',
+        unit: 'm', value: 3500, move: 'stacja', steps: ['7 cm × 50 000 = 350 000 cm', stepZ(350000, 100, 'm')],
+        why: '350 000 cm to <b>3500 m</b> — skreślamy dwa zera.' },
+      { kind: 'choice', q: 'Ze stacji idziesz dokładnie na <b>zachód</b>, wzdłuż torów. Do jakiego miejsca dojdziesz?',
+        options: ['leśniczówka', 'Sowia Góra', 'młyn nad Bystrzycą', 'kościół w Lipowej'], correct: 'leśniczówka', move: 'lesniczy',
+        why: 'Zachód to lewa strona mapy. Idąc wzdłuż torów na zachód, dochodzisz do <b>leśniczówki</b>.' },
+      { kind: 'choice', q: 'Leśniczy mówi: „Nagroda czeka w młynie”. W którym kierunku od leśniczówki leży <b>młyn</b>?',
+        options: ['północny wschód', 'północ', 'wschód', 'północny zachód'], correct: 'północny wschód', move: 'mlyn',
+        why: 'Młyn leży w górę i w prawo od leśniczówki — między północą a wschodem, czyli na <b>północnym wschodzie</b>.' }
+    ]
+  }
+];
+
+function moveExplorer(key, last) {
+  const P = PLACES[key];
+  const [px, py] = S.trail[S.trail.length - 1];
+  S.trail.push([P.x, P.y]);
+  S.place = key;
+  const ex = document.getElementById('explorer');
+  if (!ex) return;
+  ex.insertAdjacentHTML('beforebegin', `<path d="M${px} ${py}L${P.x} ${P.y}" stroke="#B33A2B" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" fill="none"/>`);
+  requestAnimationFrame(() => { ex.style.transform = `translate(${P.x}px,${P.y}px)`; });
+  Sound.play('steps');
+  if (last) {
+    ex.insertAdjacentHTML('beforebegin', chestSvg(P.x + 20, P.y - 2));
+    setTimeout(() => { confetti(); Sound.play('fanfare'); }, 1100);
+  }
+}
+
+/* opcje: dźwięk i motyw */
+(function options() {
+  const root = document.documentElement;
+  const btn = $('#optBtn'), panel = $('#optPanel'), snd = $('#soundSwitch'), thm = $('#themeSwitch');
+  let cur = null;
+  try { cur = localStorage.getItem(STORE + '-theme'); } catch (e) { }
+  if (cur) root.setAttribute('data-theme', cur);
+  const isDark = () => root.getAttribute('data-theme') === 'dark'
+    || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+  const sync = () => {
+    snd.setAttribute('aria-checked', String(!!save.sound));
+    thm.setAttribute('aria-checked', String(isDark()));
+  };
+  sync();
+  const close = () => { panel.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    panel.hidden = !panel.hidden;
+    btn.setAttribute('aria-expanded', String(!panel.hidden));
+    sync();
+  });
+  panel.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) { close(); btn.focus(); } });
+  snd.addEventListener('click', () => {
+    save.sound = !save.sound; persist(); sync();
+    Sound.play('ok');                         // próbka — słychać od razu, że działa
+  });
+  thm.addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem(STORE + '-theme', next); } catch (e) { }
+    sync();
+  });
+})();
+
+/* ============================================================
+   EKRAN GŁÓWNY
+   ============================================================ */
+const starsHtml = n => `<span class="stars" aria-label="${n} z 3 gwiazdek">${'<i>★</i>'.repeat(n)}${'☆'.repeat(3 - n)}</span>`;
+
+function trailSvg() {
+  const P = [[60, 108], [155, 62], [250, 106], [345, 58], [440, 108], [535, 60], [630, 106], [725, 58], [820, 108], [915, 62]];
+  const n = stampCount();
+  const hk = P[Math.min(n, 9)];
+  return `<svg viewBox="0 0 1000 176" role="img" aria-label="Szlak kartografa: ${n} z 10 pieczątek">
+    <g fill="none" stroke="var(--line)" stroke-width="1.2">
+      <ellipse cx="300" cy="84" rx="250" ry="70"/><ellipse cx="300" cy="84" rx="170" ry="44"/>
+      <ellipse cx="760" cy="90" rx="220" ry="64"/><ellipse cx="760" cy="90" rx="130" ry="36"/>
+    </g>
+    <polyline points="20,122 ${P.map(p => p.join(',')).join(' ')} 980,56" fill="none" stroke="var(--surface)" stroke-width="9" stroke-linejoin="round"/>
+    <polyline points="20,122 ${P.map(p => p.join(',')).join(' ')} 980,56" fill="none" stroke="#C0392B" stroke-width="4" stroke-dasharray="16 9" stroke-linejoin="round"/>
+    ${M.map((m, i) => {
+      const [x, y] = P[i];
+      const st = save.stamps[m.id];
+      return `<g class="hut" data-m="${m.id}" tabindex="0" role="button" aria-label="${esc(m.title)}${st ? ' — pieczątka zdobyta' : ''}">
+        <circle class="hut-bg" cx="${x}" cy="${y}" r="23" fill="var(--surface)" stroke="${st ? '#B33A2B' : 'var(--line-strong)'}" stroke-width="2"/>
+        <text x="${x}" y="${y + 7}" font-size="19" text-anchor="middle">${m.ikona}</text>
+        ${st ? `<g transform="translate(${x + 18},${y - 18}) rotate(-12)"><circle r="10" fill="var(--surface)" stroke="#B33A2B" stroke-width="2.5"/><path d="M-4.5 0l3 3 6-6" stroke="#B33A2B" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>` : ''}
+        <text x="${x}" y="${y + 46}" font-family="var(--f-body)" font-size="15" fill="var(--ink-soft)" text-anchor="middle">${esc(SHORT[m.id])}</text>
+      </g>`;
+    }).join('')}
+    <g transform="translate(${hk[0] - 34},${hk[1] - 8})" aria-hidden="true">
+      <circle cy="-17" r="5.5" fill="var(--ink)"/>
+      <path d="M0 -11v14M0 3l-5 11M0 3l5 11M0 -7l-7 6M0 -7l7 4" stroke="var(--ink)" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+      <rect x="-9" y="-10" width="6" height="10" rx="2" fill="#F2B233"/>
+    </g>
+    <g transform="translate(975,48)"><path d="M0 0V-26" stroke="var(--ink)" stroke-width="2"/><path d="M0 -26 14 -21 0 -16z" fill="${n >= 10 ? '#F2B233' : 'var(--line-strong)'}"/></g>
+  </svg>`;
+}
+
+function renderHome() {
+  $('#exercise').hidden = true;
+  $('#home').hidden = false;
+
+  const n = stampCount(), nr = nextRank(n);
+  $('#rank').innerHTML = `
+    <div class="rank-top">
+      <span class="rank-label">Twój stopień</span>
+      <span class="rank-name">${rankOf(n)}</span>
+      <span class="rank-meta">${n} / 10 pieczątek${nr ? ` · do stopnia „${nr[1]}” brakuje ${nr[0] - n}` : ' · komplet!'}${save.bestStreak ? ` · najdłuższa seria 🔥 ${save.bestStreak}` : ''}</span>
+    </div>
+    <div class="trail">${trailSvg()}</div>`;
+  $('#rank').querySelectorAll('.hut').forEach(h => {
+    h.addEventListener('click', () => start('module', h.dataset.m));
+    h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); start('module', h.dataset.m); } });
+  });
+
+  const nm = save.mistakes.length;
+  $('#actions').innerHTML = `
+    <button class="action primary" id="testBtn">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M8 9h8M8 13h8M8 17h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span><b>Sprawdzian z działu</b><small>12 pytań, z każdego tematu co najmniej jedno · ocena 1–6</small></span>
+    </button>
+    <button class="action" id="reviewBtn" ${nm ? '' : 'disabled'}>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M4 4v4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><b>Pokonaj swoje błędy</b><small>${nm ? 'Pytania, które poszły źle, wracają · +15 pkt za każde poprawione' : 'Na razie nie masz błędów do poprawy'}</small></span>
+      ${nm ? `<span class="count">${nm}</span>` : ''}
+    </button>
+    <button class="action" id="duelBtn">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="7.5" cy="7" r="3" stroke="currentColor" stroke-width="1.7"/><circle cx="16.5" cy="7" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M2.5 20c0-3 2.2-5.5 5-5.5s5 2.5 5 5.5M11.5 20c0-3 2.2-5.5 5-5.5s5 2.5 5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span><b>Pojedynek z rodzicem</b><small>Dwie osoby na jednym urządzeniu, na zmianę · kto wie więcej?</small></span>
+    </button>`;
+  $('#testBtn').addEventListener('click', () => start('test'));
+  $('#duelBtn').addEventListener('click', renderDuelSetup);
+  if (nm) $('#reviewBtn').addEventListener('click', () => start('review'));
+
+  $('#missions').innerHTML = MISSIONS.map(m => `
+    <button class="mission" data-mi="${m.id}">
+      <b>${esc(m.title)}</b>
+      <span>${esc(m.teaser)}</span>
+      ${starsHtml(save.treasures[m.id] || 0)}
+    </button>`).join('');
+  $('#missions').querySelectorAll('.mission').forEach(b => b.addEventListener('click', () => start('mission', b.dataset.mi)));
+
+  $('#tiles').innerHTML = M.map(m => {
+    const b = save.best[m.id] || 0;
+    const mast = Math.min(save.mastery[m.id] || 0, 2);
+    const stampTxt = save.stamps[m.id] ? '✓ pieczątka' : `pieczątka ${'●'.repeat(mast)}${'○'.repeat(2 - mast)}`;
+    return `<button class="tile" data-m="${m.id}">
+      <span class="ic" aria-hidden="true" style="font-size:20px">${m.ikona}</span>
+      <h3>${esc(m.title)}</h3>
+      <p>${esc(m.desc)}</p>
+      <span class="meta">${b ? `rekord ${b}/8` : 'nowe'} · ${stampTxt}<span class="bar"><i style="width:${Math.round(b / 8 * 100)}%"></i></span></span>
+    </button>`;
+  }).join('');
+  $('#tiles').querySelectorAll('.tile').forEach(t => t.addEventListener('click', () => start('module', t.dataset.m)));
+
+  renderPts();
+  renderStreak(false);
+  window.scrollTo({ top: 0 });
+}
+
+/* ============================================================
+   SESJA: module | test | review | mission
+   ============================================================ */
+let S = null;
+
+function start(type, arg) {
+  S = { type, arg, i: 0, ok: 0, results: [], q: null, answered: false, mistakesMade: 0 };
+  if (type === 'module') { S.mod = M.find(x => x.id === arg); S.total = 8; }
+  if (type === 'test') {
+    /* z każdego tematu jedno pytanie + dwa losowe, w losowej kolejności */
+    S.plan = shuffle([...M.map(m => m.id), ...shuffle(M).slice(0, 2).map(m => m.id)]);
+    S.total = S.plan.length;
+  }
+  if (type === 'review') {
+    S.queue = save.mistakes.slice(-8).reverse();
+    S.total = S.queue.length; S.fixed = 0;
+    if (!S.total) return renderHome();
+  }
+  if (type === 'mission') {
+    S.mission = MISSIONS.find(m => m.id === arg);
+    S.total = S.mission.steps.length;
+    S.place = S.mission.start;
+    S.trail = [[PLACES[S.place].x, PLACES[S.place].y]];
+  }
+  if (type === 'duel') {
+    /* W każdej rundzie oboje dostają pytanie z tego samego tematu (ale z innymi liczbami). */
+    S.players = [{ name: arg.p1 || 'Gracz 1', score: 0, cls: 'p1' }, { name: arg.p2 || 'Gracz 2', score: 0, cls: 'p2' }];
+    const order = arg.topic === 'all' ? shuffle(M.map(m => m.id)) : [arg.topic];
+    S.plan = Array.from({ length: arg.rounds }, (_, r) => order[r % order.length]);
+    S.total = arg.rounds * 2;
+  }
+  $('#home').hidden = true;
+  $('#exercise').hidden = false;
+  nextQ();
+  window.scrollTo({ top: 0 });
+}
+
+function sessionTitle() {
+  return S.type === 'module' ? S.mod.title
+    : S.type === 'test' ? 'Sprawdzian z działu'
+      : S.type === 'review' ? 'Pokonaj swoje błędy'
+        : S.type === 'duel' ? 'Pojedynek'
+          : S.mission.title;
+}
+
+function nextQ() {
+  if (S.i >= S.total) return renderSummary();
+  if (S.type === 'mission') {
+    const st = S.mission.steps[S.i];
+    S.curMod = { id: 'mission', theory: MISSION_THEORY };
+    S.q = Object.assign({}, st, { sub: st.sub || mapNote, fig: mapSvg({ explorer: PLACES[S.place], trail: S.trail }) });
+  } else if (S.type === 'review') {
+    S.curItem = S.queue[S.i];
+    S.curMod = M.find(m => m.id === S.curItem.modId) || M[0];
+    S.q = S.curItem.q;
+  } else {
+    const mod = S.type === 'test' ? M.find(m => m.id === S.plan[S.i])
+      : S.type === 'duel' ? M.find(m => m.id === S.plan[Math.floor(S.i / 2)])
+        : S.mod;
+    S.curMod = mod;
+    S.q = mod.gen.call(mod);
+  }
+  S.answered = false;
+  renderQ();
+  if (S.type === 'duel' && S.i > 0) Sound.play('turn');
+}
+
+function head() {
+  const dots = Array.from({ length: S.total }, (_, k) => {
+    const r = S.results[k];
+    return `<i class="${r === true ? 'ok' : r === false ? 'no' : k === S.i ? 'now' : ''}"></i>`;
+  }).join('');
+  if (S.type === 'duel') {
+    const [a, b] = S.players, t = S.i % 2;
+    return `<div class="ex-head">
+      <button class="back" id="backBtn">← Menu</button>
+      <h2>${esc(sessionTitle())}</h2>
+      <span class="board" aria-label="Wynik: ${esc(a.name)} ${a.score}, ${esc(b.name)} ${b.score}">
+        <span class="pl p1${t === 0 ? ' now' : ''}">${esc(a.name)}</span>
+        <span class="sc" id="duelScore">${a.score} : ${b.score}</span>
+        <span class="pl p2${t === 1 ? ' now' : ''}">${esc(b.name)}</span>
+      </span>
+    </div>`;
+  }
+  return `<div class="ex-head">
+    <button class="back" id="backBtn">← Menu</button>
+    <h2>${esc(sessionTitle())}</h2>
+    <span class="prog">${S.i + 1} / ${S.total}</span>
+    <span class="dots">${dots}</span>
+  </div>`;
+}
+
+/* ---------- pojedynek: ustawienia ---------- */
+function renderDuelSetup() {
+  const d = save.duel || {};
+  $('#home').hidden = true;
+  $('#exercise').hidden = false;
+  $('#exercise').innerHTML = `<div class="ex-head">
+      <button class="back" id="backBtn">← Menu</button>
+      <h2>Pojedynek</h2>
+    </div>
+    <div class="card">
+      <p class="q">Kto się zmierzy?</p>
+      <p class="qsub">Gracie na zmianę na jednym urządzeniu. W każdej rundzie oboje dostajecie pytanie z tego samego tematu, ale z innymi liczbami. Wygrywa osoba, która więcej razy odpowie dobrze.</p>
+      <form class="duel-form" id="duelForm">
+        <div class="duel-grid">
+          <label class="p1" for="duelP1"><div><span></span>Gracz 1 — zaczyna</div>
+            <input id="duelP1" maxlength="16" autocomplete="off" placeholder="np. Ola" value="${esc(d.p1 || '')}"></label>
+          <label class="p2" for="duelP2"><div><span></span>Gracz 2</div>
+            <input id="duelP2" maxlength="16" autocomplete="off" placeholder="np. Mama" value="${esc(d.p2 || '')}"></label>
+        </div>
+        <div class="duel-grid">
+          <label for="duelTopic">Temat
+            <select id="duelTopic">
+              <option value="all">Wszystkie tematy na zmianę</option>
+              ${M.map(m => `<option value="${m.id}"${d.topic === m.id ? ' selected' : ''}>${esc(m.title)}</option>`).join('')}
+            </select></label>
+          <label for="duelRounds">Długość
+            <select id="duelRounds">
+              ${[3, 5, 8].map(n => `<option value="${n}"${(d.rounds || 5) === n ? ' selected' : ''}>${n} rund (po ${n} ${n === 3 ? 'pytania' : 'pytań'} na osobę)</option>`).join('')}
+            </select></label>
+        </div>
+        <div><button class="check" type="submit">Zaczynamy!</button></div>
+      </form>
+    </div>`;
+  $('#backBtn').addEventListener('click', renderHome);
+  $('#duelForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const cfg = {
+      p1: $('#duelP1').value.trim().slice(0, 16), p2: $('#duelP2').value.trim().slice(0, 16),
+      topic: $('#duelTopic').value, rounds: +$('#duelRounds').value
+    };
+    save.duel = cfg; persist();
+    start('duel', cfg);
+  });
+  window.scrollTo({ top: 0 });
+}
+
+function renderQ() {
+  const q = S.q;
+  let body = '';
+
+  if (q.kind === 'hotspot') {
+    body = `<div class="figure hsmap${S.type === 'test' ? ' nohover' : ''}" id="hsmap">${q.fig}</div>`;
+  } else {
+    if (q.fig) body += `<div class="figure">${q.fig}</div>` + (q.figcap ? `<div class="figcap">${esc(q.figcap)}</div>` : '');
+    if (q.kind === 'choice') {
+      const cls = q.symbols ? 'opts sym' : (q.options.length === 2 ? 'opts two' : 'opts');
+      body += `<div class="${cls}" id="opts">` + q.options.map((o, i) => {
+        const val = q.symbols ? o.v : o;
+        const inner = q.symbols
+          ? `${o.html}<span style="font-size:13px;color:var(--ink-soft)">${'ABCD'[i]}</span>`
+          : `<span class="key">${'ABCD'[i]}</span><span>${esc(o)}</span>`;
+        return `<button class="opt${q.symbols ? ' sym-opt' : ''}" data-v="${esc(val)}">${inner}</button>`;
+      }).join('') + `</div>`;
+    } else if (q.kind === 'number') {
+      body += `<div class="numrow">
+          <input id="ans" type="text" inputmode="decimal" autocomplete="off" placeholder="?" aria-label="Twoja odpowiedź">
+          <span class="unit">${esc(q.unit)}</span>
+          <button class="check" id="checkBtn">Sprawdź</button>
+        </div>`;
+    }
+  }
+
+  const sub = q.kind === 'hotspot' && S.type === 'test' ? 'W sprawdzianie pola się nie podświetlają — wskaż z pamięci.' : q.sub;
+  let story = S.type === 'mission' && S.i === 0 ? `<p class="story">${esc(S.mission.intro)}</p>` : '';
+  if (S.type === 'duel') {
+    const pl = S.players[S.i % 2];
+    story = `<div class="turn ${pl.cls}"><span>Pytanie dla:</span><span class="who">${esc(pl.name)}</span><small>runda ${Math.floor(S.i / 2) + 1} z ${S.plan.length}</small></div>`;
+  }
+
+  $('#exercise').innerHTML = head() + `<div class="card">
+      ${story}
+      <p class="q">${q.q}</p>
+      ${sub ? `<p class="qsub">${esc(sub)}</p>` : ''}
+      ${body}
+      <div class="fb" id="fb"></div>
+    </div>
+    <details class="theory"><summary>Jak to działa? — przypomnienie z lekcji</summary><div class="body">${S.curMod.theory}</div></details>`;
+
+  $('#backBtn').addEventListener('click', renderHome);
+
+  if (q.kind === 'choice') {
+    $('#opts').querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => answer(b.dataset.v, b)));
+  } else if (q.kind === 'number') {
+    const inp = $('#ans');
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') answer(inp.value); });
+    $('#checkBtn').addEventListener('click', () => answer(inp.value));
+    inp.focus();
+  } else if (q.kind === 'hotspot') {
+    $('#hsmap').querySelectorAll('.hs').forEach(g => g.addEventListener('click', () => answer(g.dataset.k, g)));
+  }
+}
+
+function answer(val, el) {
+  if (S.answered) return;
+  const q = S.q;
+  let good, shown = val;
+
+  if (q.kind === 'number') {
+    const v = parseFloat(String(val).replace(/\s/g, '').replace(',', '.'));
+    if (isNaN(v)) { $('#ans').focus(); return; }
+    const tol = Math.max(Math.abs(q.value) * 0.005, 0.001);
+    good = Math.abs(v - q.value) <= tol;
+    shown = num(v);
+  } else {
+    good = String(val) === String(q.correct);
+  }
+
+  S.answered = true;
+  S.results[S.i] = good;
+
+  /* punkty i seria. Seria rośnie tylko przy pytaniach, w których trudno zgadnąć
+     (wpisywanie liczby, klikanie mapy, co najmniej 3 odpowiedzi do wyboru). */
+  const eligible = q.kind !== 'choice' || q.options.length >= 3;
+  let gain = 0, bonus = 0;
+  const duel = S.type === 'duel';
+  if (duel) {
+    /* pojedynek to zabawa dla dwojga — nie rusza punktów, serii ani zeszytu błędów dziecka */
+    if (good) S.players[S.i % 2].score++;
+    $('#duelScore').textContent = `${S.players[0].score} : ${S.players[1].score}`;
+  } else if (good) {
+    S.ok++;
+    gain = S.type === 'test' ? 12 : (S.type === 'module' ? 10 : 15);
+    if (eligible) { streak++; if (streak >= 3) bonus = 5; }
+    save.pts += gain + bonus;
+    if (streak > save.bestStreak) save.bestStreak = streak;
+  } else {
+    streak = 0;
+    S.mistakesMade++;
+    if (S.type === 'module' || S.type === 'test') addMistake(S.curMod.id, q);
+  }
+  if (S.type === 'review' && good) { removeMistake(S.curItem.key); S.fixed++; }
+  persist(); renderPts(); renderStreak(good && eligible && !duel);
+  Sound.play(good ? 'ok' : 'bad', duel ? 0 : streak);
+
+  /* oznacz odpowiedzi */
+  if (q.kind === 'choice') {
+    $('#opts').querySelectorAll('.opt').forEach(b => {
+      b.disabled = true;
+      if (b.dataset.v === String(q.correct)) b.classList.add('right');
+      else if (b === el) b.classList.add('wrong');
+    });
+  } else if (q.kind === 'hotspot') {
+    const map = $('#hsmap');
+    map.classList.add('locked', 'spot');
+    map.querySelectorAll('.hs').forEach(g => {
+      if (g.dataset.k === q.correct) g.classList.add('mark-ok', 'focus');
+      else if (g === el) g.classList.add('mark-no');
+    });
+  } else {
+    $('#ans').disabled = true;
+    $('#checkBtn').disabled = true;
+  }
+
+  /* wzgórze wyrasta z poziomic + przekrój */
+  if (q.hill) {
+    const fig = document.querySelector('#exercise .figure');
+    const svg = fig && fig.querySelector('svg.hill');
+    if (svg) {
+      requestAnimationFrame(() => svg.classList.add('lift'));
+      fig.insertAdjacentHTML('beforeend', `<div class="profile">${profilSvg(q.hill.base, q.hill.ci)}
+        <p class="figcap">Przekrój wzgórza z zachodu (W) na wschód (E). Gęste poziomice = stromy stok.</p></div>`);
+    }
+  }
+
+  /* odkrywca idzie dalej — także po złej odpowiedzi, żeby przygoda trwała */
+  if (S.type === 'mission' && q.move) moveExplorer(q.move, S.i + 1 >= S.total);
+
+  let correctTxt;
+  if (q.kind === 'number') correctTxt = `${num(q.value)} ${q.unit}`;
+  else if (q.kind === 'hotspot') correctTxt = q.names[q.correct];
+  else if (q.symbols) correctTxt = SYMBOLS[q.correct].name;
+  else correctTxt = q.correct;
+
+  const note = good ? ''
+    : S.type === 'review' ? '<p>To pytanie zostaje w zeszycie błędów — wróci następnym razem.</p>'
+      : (S.type === 'module' || S.type === 'test') ? '<p>To pytanie trafia do „Pokonaj swoje błędy” — wrócisz do niego później.</p>' : '';
+
+  const fb = $('#fb');
+  fb.className = 'fb on ' + (good ? 'good' : 'bad');
+  fb.innerHTML = `
+    <h4>${good
+      ? (duel ? `✓ Dobrze!<span class="gain">+1 dla: ${esc(S.players[S.i % 2].name)}</span>`
+        : `✓ Dobrze!<span class="gain">+${gain + bonus} pkt</span>${bonus ? `<span class="gain hot">🔥 seria ${streak}</span>` : ''}`)
+      : '✗ Niestety nie'}</h4>
+    ${good ? '' : `<p>Poprawna odpowiedź: <b>${esc(correctTxt)}</b>${q.kind === 'number' ? ` (twoja odpowiedź: ${esc(shown)} ${esc(q.unit)})` : ''}</p>`}
+    ${q.why ? `<p>${q.why}</p>` : ''}
+    ${q.steps ? `<div class="steps">${q.steps.map((s, k) => `<span style="--k:${k}">${typeof s === 'string' ? esc(s) : s.html}</span>`).join('')}</div>` : ''}
+    ${note}
+    <button class="next" id="nextBtn">${S.i + 1 >= S.total ? 'Zobacz wynik'
+      : duel ? `Podaj urządzenie: teraz ${esc(S.players[(S.i + 1) % 2].name)} →` : 'Następne pytanie →'}</button>`;
+  $('#nextBtn').addEventListener('click', () => { S.i++; nextQ(); });
+  $('#nextBtn').focus({ preventScroll: true });
+}
+
+function verdict(p) {
+  return p === 1 ? ['Perfekcyjnie!', 'Komplet punktów — ten temat masz opanowany.']
+    : p >= .75 ? ['Bardzo dobrze!', 'Prawie wszystko dobrze. Jeszcze jedna runda i będzie komplet.']
+      : p >= .5 ? ['Nieźle!', 'Połowa za tobą. Zajrzyj do przypomnienia pod zadaniem i spróbuj jeszcze raz.']
+        : ['Trzeba poćwiczyć', 'Otwórz „Jak to działa?” przy zadaniach — tam jest wszystko wytłumaczone krok po kroku.'];
+}
+
+function renderSummary() {
+  const ok = S.ok, total = S.total;
+  let top = '', title = '', text = '', extra = '', celebrate = false;
+  let thumpAt = 0, fanfare = null;   // dźwięk „tup” w chwili, gdy pieczątka / ocena uderza w kartkę
+
+  if (S.type === 'module') {
+    const id = S.mod.id;
+    if (ok > (save.best[id] || 0)) save.best[id] = ok;
+    const before = rankOf(stampCount());
+    let stampNew = false;
+    if (ok >= 7 && !save.stamps[id]) {
+      save.mastery[id] = (save.mastery[id] || 0) + 1;
+      if (save.mastery[id] >= 2) { save.stamps[id] = new Date().toLocaleDateString('pl-PL'); stampNew = true; }
+    }
+    persist();
+    top = `<div class="score">${ok}<small>/${total}</small></div>`;
+    [title, text] = verdict(ok / total);
+    if (stampNew) {
+      const after = rankOf(stampCount());
+      extra = `<div class="stamp-wrap">${stampSvg(SHORT[id], save.stamps[id])}</div>
+        <p><b>Nowa pieczątka na szlaku!</b>${after !== before ? ` Awansujesz na stopień: <b>${after}</b>.` : ''}</p>`;
+      celebrate = true;
+      thumpAt = 700;
+    } else if (save.stamps[id]) {
+      extra = `<p class="mastery">Pieczątkę za ten temat już masz ✓</p>`;
+    } else {
+      extra = `<p class="mastery">Do pieczątki: <b>${save.mastery[id] || 0} z 2</b> rund z wynikiem co najmniej 7/8.</p>`;
+    }
+    if (ok === total) celebrate = true;
+  }
+
+  if (S.type === 'test') {
+    const [g, name] = grade(ok, total);
+    top = `<div class="grade g${g}">${g}</div><div class="grade-name">${name}</div>`;
+    title = `${ok} / ${total} poprawnych`;
+    text = g >= 5 ? 'Świetny wynik — sprawdzian w szkole nie powinien cię zaskoczyć.'
+      : g >= 3 ? 'Dobra podstawa. Popraw błędy w „Pokonaj swoje błędy” i spróbuj jeszcze raz.'
+        : 'Przećwicz najpierw tematy z ćwiczeń, a potem wróć do sprawdzianu.';
+    extra = `<p class="small-note">Progi: 100% → 6 · od 85% → 5 · od 70% → 4 · od 50% → 3 · od 30% → 2.
+      To ocena orientacyjna — w twojej szkole progi mogą być trochę inne.</p>`;
+    celebrate = g === 6;
+    thumpAt = 550;
+  }
+
+  if (S.type === 'duel') {
+    const [a, b] = S.players;
+    top = `<div class="vs"><span class="p1">${a.score}</span> : <span class="p2">${b.score}</span></div>
+      <div class="board" style="justify-content:center; margin:8px 0 4px"><span class="pl p1">${esc(a.name)}</span><span class="pl p2">${esc(b.name)}</span></div>`;
+    if (a.score === b.score) {
+      title = 'Remis!';
+      text = `${esc(a.name)} i ${esc(b.name)} wiedzą tyle samo. Może rewanż?`;
+    } else {
+      const w = a.score > b.score ? a : b, l = w === a ? b : a;
+      title = `Wygrywa ${esc(w.name)}!`;
+      text = `${w.score} : ${l.score}. ${esc(l.name)} — czas na rewanż?`;
+    }
+    extra = `<p class="small-note">Pojedynek nie zmienia punktów, serii ani zeszytu błędów — to zabawa dla dwojga.</p>`;
+    celebrate = true;
+  }
+
+  if (S.type === 'review') {
+    top = `<div class="score">${S.fixed}<small>/${total}</small></div>`;
+    title = S.fixed === total ? 'Wszystkie pokonane!' : 'Część błędów pokonana';
+    const left = save.mistakes.length;
+    text = left ? `W zeszycie błędów zostało jeszcze ${left} ${left === 1 ? 'pytanie' : left < 5 ? 'pytania' : 'pytań'}.` : 'Zeszyt błędów jest pusty. Brawo!';
+    celebrate = S.fixed === total;
+  }
+
+  if (S.type === 'mission') {
+    const stars = S.mistakesMade === 0 ? 3 : S.mistakesMade === 1 ? 2 : 1;
+    const id = S.mission.id;
+    if (stars > (save.treasures[id] || 0)) { save.treasures[id] = stars; persist(); }
+    const end = PLACES[S.place];
+    top = `<div class="figure">${mapSvg({ explorer: end, trail: S.trail, treasure: end })}</div>${starsHtml(stars)}`;
+    title = 'Skarb odnaleziony!';
+    text = stars === 3 ? 'Bez ani jednej pomyłki — trzy gwiazdki!'
+      : `Pomyłek po drodze: ${S.mistakesMade}. Spróbuj jeszcze raz po trzy gwiazdki.`;
+    celebrate = true;
+    fanfare = false;   // fanfara zagrała już przy znalezieniu skrzyni
+  }
+
+  $('#exercise').innerHTML = `<div class="ex-head">
+      <button class="back" id="backBtn">← Menu</button>
+      <h2>${esc(sessionTitle())}</h2>
+    </div>
+    <div class="card done">
+      ${top}
+      <h3>${title}</h3>
+      <p>${text}</p>
+      ${extra}
+      <div class="done-actions">
+        ${S.type === 'review' && !save.mistakes.length ? '' : `<button class="check" id="againBtn">${S.type === 'duel' ? 'Rewanż' : 'Jeszcze raz'}</button>`}
+        <button class="ghost" id="homeBtn">Wróć do menu</button>
+      </div>
+    </div>`;
+  $('#backBtn').addEventListener('click', renderHome);
+  $('#homeBtn').addEventListener('click', renderHome);
+  const again = $('#againBtn');
+  if (again) again.addEventListener('click', () => start(S.type, S.arg));
+  renderPts();
+  window.scrollTo({ top: 0 });
+  if (thumpAt) setTimeout(() => Sound.play('stamp'), REDUCED ? 0 : thumpAt);
+  if (celebrate) setTimeout(() => { confetti(); if (fanfare !== false) Sound.play('fanfare'); }, Math.max(350, thumpAt + 150));
+}
+
+/* ---------- start ---------- */
+renderHome();
+</script>
+
+</body>
+</html>

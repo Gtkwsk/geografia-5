@@ -1,0 +1,8 @@
+# pliki tworzone przez system i OneDrive
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# pliki robocze
+_test/
+*.tmp
