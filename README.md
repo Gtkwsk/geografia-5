@@ -8,8 +8,13 @@ znaków umownych, kierunków świata, poziomic i barw hipsometrycznych.
 
 ## Jak uruchomić
 
-Otwórz plik `index.html` w przeglądarce — to wszystko. Aplikacja jest w jednym pliku,
-nie wymaga serwera, instalacji ani internetu (bez sieci użyje czcionek systemowych).
+Otwórz plik `index.html` w przeglądarce — to wszystko. Cała logika jest w jednym pliku,
+nie wymaga serwera, instalacji ani internetu. Czcionki leżą w folderze `fonts/`
+(bez nich użyte zostaną czcionki systemowe).
+
+Otwarta z serwera (https) aplikacja da się też „zainstalować” na telefonie
+i działa bez internetu po pierwszym otwarciu (service worker `sw.js`, strategia
+„najpierw sieć” — przy dostępie do internetu zawsze ładuje się najnowsza wersja).
 
 ## Co jest w środku
 
@@ -53,7 +58,8 @@ krok po kroku mają pozwolić na naukę bez pomocy dorosłego.
 
 ## Prywatność
 
-Aplikacja nie wysyła nigdzie żadnych danych. Postęp (punkty, pieczątki, imiona z pojedynku)
+Aplikacja nie wysyła nigdzie żadnych danych i nie łączy się z zewnętrznymi serwerami
+(czcionki są hostowane razem z aplikacją). Postęp (punkty, pieczątki, imiona z pojedynku)
 zapisuje się wyłącznie w przeglądarce, na tym urządzeniu.
 
 ## Publikowanie w sieci
@@ -64,8 +70,12 @@ główny katalog repozytorium, a stroną startową `index.html`. Nie ma nic do b
 ## Struktura
 
 ```
-index.html   — cała aplikacja: układ strony, style, logika, grafiki (SVG) i dźwięki
-README.md    — ten plik
+index.html            — cała aplikacja: układ strony, style, logika, grafiki (SVG) i dźwięki
+fonts/                — czcionki (Bricolage Grotesque, Source Sans 3, IBM Plex Mono; licencja SIL OFL)
+icons/                — ikony aplikacji (telefon, zakładki)
+manifest.webmanifest  — opis aplikacji do instalacji na telefonie
+sw.js                 — praca bez internetu; po zmianie plików podbij w nim VERSION
+README.md             — ten plik
 ```
 
 ## Licencja
